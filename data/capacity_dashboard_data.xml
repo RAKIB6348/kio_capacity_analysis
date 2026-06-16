@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="kio_capacity_dashboard_main" model="kio.capacity.dashboard">
+        <field name="name">Capacity Overview</field>
+        <field name="total_capacity">0</field>
+        <field name="bandwidth_capacity">0</field>
+        <field name="mac_capacity">0</field>
+        <field name="free_capacity">0</field>
+    </record>
+</odoo>

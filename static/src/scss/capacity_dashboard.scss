@@ -1,0 +1,83 @@
+.o_kio_capacity_dashboard {
+    background: #f4f6f8;
+    padding: 24px;
+
+    .o_kanban_renderer {
+        min-height: 100%;
+    }
+
+    .o_kanban_record {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+}
+
+.o_kio_dashboard_grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(190px, 1fr));
+    gap: 16px;
+    width: 100%;
+}
+
+.o_kio_metric_card {
+    display: flex;
+    align-items: center;
+    min-height: 128px;
+    padding: 22px;
+    border: 1px solid #dfe3e8;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(33, 43, 54, 0.08);
+}
+
+.o_kio_metric_icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+    margin-right: 16px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 23px;
+}
+
+.o_kio_metric_label {
+    margin-bottom: 5px;
+    color: #637381;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.o_kio_metric_value {
+    color: #212b36;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.o_kio_metric_total .o_kio_metric_icon { background: #2563eb; }
+.o_kio_metric_bandwidth .o_kio_metric_icon { background: #0891b2; }
+.o_kio_metric_mac .o_kio_metric_icon { background: #7c3aed; }
+.o_kio_metric_free .o_kio_metric_icon { background: #16803c; }
+
+@media (max-width: 1100px) {
+    .o_kio_dashboard_grid { grid-template-columns: repeat(2, minmax(190px, 1fr)); }
+}
+
+@media (max-width: 575px) {
+    .o_kio_capacity_dashboard { padding: 12px; }
+    .o_kio_dashboard_grid { grid-template-columns: 1fr; }
+}
+
+// This dashboard is a fixed summary, so its kanban search controls are unnecessary.
+.o_view_controller:has(.o_kio_capacity_dashboard) {
+    .o_control_panel_actions .o_searchview,
+    .o_control_panel_navigation .o_searchview_dropdown_toggler {
+        display: none !important;
+    }
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_kio_capacity_dashboard_kanban" model="ir.ui.view">
+        <field name="name">kio.capacity.dashboard.kanban</field>
+        <field name="model">kio.capacity.dashboard</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kio_capacity_dashboard" create="false" edit="false" delete="false">
+                <field name="total_capacity"/>
+                <field name="bandwidth_capacity"/>
+                <field name="mac_capacity"/>
+                <field name="free_capacity"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="o_kio_dashboard_grid">
+                            <div class="o_kio_metric_card o_kio_metric_total">
+                                <div class="o_kio_metric_icon" title="Total Capacity"><i class="fa fa-database"/></div>
+                                <div><div class="o_kio_metric_label">Total Capacity</div><div class="o_kio_metric_value"><field name="total_capacity"/></div></div>
+                            </div>
+                            <div class="o_kio_metric_card o_kio_metric_bandwidth">
+                                <div class="o_kio_metric_icon" title="Bandwidth Capacity"><i class="fa fa-signal"/></div>
+                                <div><div class="o_kio_metric_label">Bandwidth Capacity</div><div class="o_kio_metric_value"><field name="bandwidth_capacity"/></div></div>
+                            </div>
+                            <div class="o_kio_metric_card o_kio_metric_mac">
+                                <div class="o_kio_metric_icon" title="MAC Capacity"><i class="fa fa-server"/></div>
+                                <div><div class="o_kio_metric_label">MAC Capacity</div><div class="o_kio_metric_value"><field name="mac_capacity"/></div></div>
+                            </div>
+                            <div class="o_kio_metric_card o_kio_metric_free">
+                                <div class="o_kio_metric_icon" title="Free Capacity"><i class="fa fa-check-circle"/></div>
+                                <div><div class="o_kio_metric_label">Free Capacity</div><div class="o_kio_metric_value"><field name="free_capacity"/></div></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_kio_capacity_dashboard" model="ir.actions.act_window">
+        <field name="name">Capacity Dashboard</field>
+        <field name="res_model">kio.capacity.dashboard</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_kio_capacity_dashboard_kanban"/>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem id="menu_kio_capacity_root" name="Capacity Analysis" sequence="10"/>
+    <menuitem id="menu_kio_capacity_dashboard" name="Dashboard" parent="menu_kio_capacity_root" action="action_kio_capacity_dashboard" sequence="10"/>
+</odoo>
