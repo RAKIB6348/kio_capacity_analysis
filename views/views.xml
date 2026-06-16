@@ -10,113 +10,197 @@
                 <field name="bandwidth_capacity"/>
                 <field name="mac_capacity"/>
                 <field name="free_capacity"/>
+                <field name="write_date"/>
 
                 <templates>
                     <t t-name="kanban-box">
                         <div class="o_kio_dashboard_wrapper">
 
-                            <!-- Dashboard Header -->
+                            <!-- ===== HEADER ===== -->
                             <div class="o_kio_dashboard_header">
                                 <div>
                                     <div class="o_kio_breadcrumb">
+                                        <span>🏠 Home</span>
+                                        <i class="fa fa-chevron-right"/>
                                         <span>Capacity Analysis</span>
                                         <i class="fa fa-chevron-right"/>
-                                        <span class="o_kio_breadcrumb_current">Capacity Dashboard</span>
+                                        <span class="o_kio_breadcrumb_current">📊 Dashboard</span>
                                     </div>
 
-                                    <h1 class="o_kio_dashboard_title">Capacity Dashboard</h1>
+                                    <h1 class="o_kio_dashboard_title">⚡ Capacity Overview</h1>
                                     <p class="o_kio_dashboard_subtitle">
-                                        Overview of system capacity and resource availability
+                                        Real-time resource utilization and capacity metrics
                                     </p>
                                 </div>
 
-                                <div class="o_kio_today_btn">
-                                    <i class="fa fa-calendar-o"/>
-                                    <span>Today</span>
-                                    <i class="fa fa-angle-down"/>
+                                <div class="o_kio_header_right">
+                                    <div class="o_kio_today_btn">
+                                        <i class="fa fa-calendar-check-o"/>
+                                        <span>Last Updated</span>
+                                        <span class="o_kio_time_badge">
+                                            <t t-esc="new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })"/>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Metric Cards -->
+                            <!-- ===== METRIC CARDS GRID ===== -->
                             <div class="o_kio_dashboard_grid">
 
-                                <!-- Total Capacity -->
+                                <!-- 1. Total Capacity -->
                                 <div class="o_kio_metric_card o_kio_metric_total">
                                     <div class="o_kio_top_line"></div>
-
-                                    <div class="o_kio_icon_row">
+                                    <div class="o_kio_card_glow"></div>
+                                    
+                                    <div class="o_kio_card_header">
                                         <div class="o_kio_metric_icon">
                                             <i class="fa fa-database"/>
                                         </div>
-                                        <div class="o_kio_dot_pattern"></div>
+                                        <div class="o_kio_status_badge">
+                                            <span class="o_kio_status_dot active"></span>
+                                            Active
+                                        </div>
                                     </div>
 
                                     <div class="o_kio_metric_label">Total Capacity</div>
-
                                     <div class="o_kio_metric_value">
-                                        <field name="total_capacity"/>
+                                        <span class="o_kio_number"><field name="total_capacity"/></span>
                                         <span class="o_kio_metric_unit">GB</span>
+                                    </div>
+
+                                    <div class="o_kio_metric_footer">
+                                        <span class="o_kio_trend_up">
+                                            <i class="fa fa-arrow-up"/> +12%
+                                        </span>
+                                        <span class="o_kio_updated">Updated now</span>
                                     </div>
                                 </div>
 
-                                <!-- Bandwidth Capacity -->
+                                <!-- 2. Bandwidth Capacity -->
                                 <div class="o_kio_metric_card o_kio_metric_bandwidth">
                                     <div class="o_kio_top_line"></div>
-
-                                    <div class="o_kio_icon_row">
+                                    <div class="o_kio_card_glow"></div>
+                                    
+                                    <div class="o_kio_card_header">
                                         <div class="o_kio_metric_icon">
-                                            <i class="fa fa-signal"/>
+                                            <i class="fa fa-wifi"/>
                                         </div>
-                                        <div class="o_kio_dot_pattern"></div>
+                                        <div class="o_kio_status_badge">
+                                            <span class="o_kio_status_dot stable"></span>
+                                            Online
+                                        </div>
                                     </div>
 
                                     <div class="o_kio_metric_label">Bandwidth Capacity</div>
-
                                     <div class="o_kio_metric_value">
-                                        <field name="bandwidth_capacity"/>
+                                        <span class="o_kio_number"><field name="bandwidth_capacity"/></span>
                                         <span class="o_kio_metric_unit">Mbps</span>
+                                    </div>
+
+                                    <div class="o_kio_metric_footer">
+                                        <span class="o_kio_trend_stable">
+                                            <i class="fa fa-minus"/> Stable
+                                        </span>
+                                        <span class="o_kio_updated">Updated now</span>
                                     </div>
                                 </div>
 
-                                <!-- MAC Capacity -->
+                                <!-- 3. MAC Capacity -->
                                 <div class="o_kio_metric_card o_kio_metric_mac">
                                     <div class="o_kio_top_line"></div>
-
-                                    <div class="o_kio_icon_row">
+                                    <div class="o_kio_card_glow"></div>
+                                    
+                                    <div class="o_kio_card_header">
                                         <div class="o_kio_metric_icon">
                                             <i class="fa fa-server"/>
                                         </div>
-                                        <div class="o_kio_dot_pattern"></div>
+                                        <div class="o_kio_status_badge">
+                                            <span class="o_kio_status_dot warning"></span>
+                                            Online
+                                        </div>
                                     </div>
 
                                     <div class="o_kio_metric_label">MAC Capacity</div>
-
                                     <div class="o_kio_metric_value">
-                                        <field name="mac_capacity"/>
+                                        <span class="o_kio_number"><field name="mac_capacity"/></span>
                                         <span class="o_kio_metric_unit">Units</span>
+                                    </div>
+
+                                    <div class="o_kio_metric_footer">
+                                        <span class="o_kio_trend_up">
+                                            <i class="fa fa-arrow-up"/> +8%
+                                        </span>
+                                        <span class="o_kio_updated">Updated now</span>
                                     </div>
                                 </div>
 
-                                <!-- Free Capacity -->
+                                <!-- 4. Free Capacity -->
                                 <div class="o_kio_metric_card o_kio_metric_free">
                                     <div class="o_kio_top_line"></div>
-
-                                    <div class="o_kio_icon_row">
+                                    <div class="o_kio_card_glow"></div>
+                                    
+                                    <div class="o_kio_card_header">
                                         <div class="o_kio_metric_icon">
-                                            <i class="fa fa-shield"/>
+                                            <i class="fa fa-check-circle"/>
                                         </div>
-                                        <div class="o_kio_dot_pattern"></div>
+                                        <div class="o_kio_status_badge">
+                                            <span class="o_kio_status_dot active"></span>
+                                            Available
+                                        </div>
                                     </div>
 
                                     <div class="o_kio_metric_label">Free Capacity</div>
-
                                     <div class="o_kio_metric_value">
-                                        <field name="free_capacity"/>
+                                        <span class="o_kio_number"><field name="free_capacity"/></span>
                                         <span class="o_kio_metric_unit">GB</span>
+                                    </div>
+
+                                    <div class="o_kio_metric_footer">
+                                        <span class="o_kio_trend_up">
+                                            <i class="fa fa-arrow-up"/> +5%
+                                        </span>
+                                        <span class="o_kio_updated">Updated now</span>
                                     </div>
                                 </div>
 
                             </div>
+
+                            <!-- ===== BOTTOM STATS SECTION ===== -->
+                            <div class="o_kio_bottom_stats">
+                                <div class="o_kio_stat_card">
+                                    <div class="o_kio_stat_icon">🖥️</div>
+                                    <div class="o_kio_stat_content">
+                                        <span class="o_kio_stat_label">System Health</span>
+                                        <div class="o_kio_stat_progress">
+                                            <div class="o_kio_stat_bar" style="width: 92%"></div>
+                                        </div>
+                                        <span class="o_kio_stat_value">92%</span>
+                                    </div>
+                                </div>
+
+                                <div class="o_kio_stat_card">
+                                    <div class="o_kio_stat_icon">⏱️</div>
+                                    <div class="o_kio_stat_content">
+                                        <span class="o_kio_stat_label">Uptime</span>
+                                        <div class="o_kio_stat_progress">
+                                            <div class="o_kio_stat_bar o_kio_stat_bar_green" style="width: 99.9%"></div>
+                                        </div>
+                                        <span class="o_kio_stat_value">99.9%</span>
+                                    </div>
+                                </div>
+
+                                <div class="o_kio_stat_card">
+                                    <div class="o_kio_stat_icon">📦</div>
+                                    <div class="o_kio_stat_content">
+                                        <span class="o_kio_stat_label">Total Resources</span>
+                                        <div class="o_kio_stat_progress">
+                                            <div class="o_kio_stat_bar o_kio_stat_bar_purple" style="width: 78%"></div>
+                                        </div>
+                                        <span class="o_kio_stat_value">78%</span>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </t>
                 </templates>
@@ -124,13 +208,14 @@
         </field>
     </record>
 
-    <!-- Action -->
+    <!-- Action with Search View Disabled -->
     <record id="action_kio_capacity_dashboard" model="ir.actions.act_window">
         <field name="name">Capacity Dashboard</field>
         <field name="res_model">kio.capacity.dashboard</field>
         <field name="view_mode">kanban</field>
         <field name="view_id" ref="view_kio_capacity_dashboard_kanban"/>
         <field name="target">current</field>
+        <field name="context">{'search_view_enabled': False}</field>
     </record>
 
     <!-- Menu -->
