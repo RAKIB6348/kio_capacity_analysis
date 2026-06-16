@@ -1,0 +1,28 @@
+# Python compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Odoo specific
+*.odoo
+*.db
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+
+# Virtual environment
+venv/
+env/
+.env/

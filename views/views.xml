@@ -164,42 +164,7 @@
                                 </div>
 
                             </div>
-
-                            <!-- ===== BOTTOM STATS SECTION ===== -->
-                            <div class="o_kio_bottom_stats">
-                                <div class="o_kio_stat_card">
-                                    <div class="o_kio_stat_icon">🖥️</div>
-                                    <div class="o_kio_stat_content">
-                                        <span class="o_kio_stat_label">System Health</span>
-                                        <div class="o_kio_stat_progress">
-                                            <div class="o_kio_stat_bar" style="width: 92%"></div>
-                                        </div>
-                                        <span class="o_kio_stat_value">92%</span>
-                                    </div>
-                                </div>
-
-                                <div class="o_kio_stat_card">
-                                    <div class="o_kio_stat_icon">⏱️</div>
-                                    <div class="o_kio_stat_content">
-                                        <span class="o_kio_stat_label">Uptime</span>
-                                        <div class="o_kio_stat_progress">
-                                            <div class="o_kio_stat_bar o_kio_stat_bar_green" style="width: 99.9%"></div>
-                                        </div>
-                                        <span class="o_kio_stat_value">99.9%</span>
-                                    </div>
-                                </div>
-
-                                <div class="o_kio_stat_card">
-                                    <div class="o_kio_stat_icon">📦</div>
-                                    <div class="o_kio_stat_content">
-                                        <span class="o_kio_stat_label">Total Resources</span>
-                                        <div class="o_kio_stat_progress">
-                                            <div class="o_kio_stat_bar o_kio_stat_bar_purple" style="width: 78%"></div>
-                                        </div>
-                                        <span class="o_kio_stat_value">78%</span>
-                                    </div>
-                                </div>
-                            </div>
+                            
 
                         </div>
                     </t>
