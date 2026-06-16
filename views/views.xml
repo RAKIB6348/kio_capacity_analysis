@@ -65,7 +65,7 @@
                                     <div class="o_kio_metric_label">Total Capacity</div>
                                     <div class="o_kio_metric_value">
                                         <span class="o_kio_number"><field name="total_capacity"/></span>
-                                        <span class="o_kio_metric_unit">GB</span>
+                                        <span class="o_kio_metric_unit">Mbps</span>
                                     </div>
 
                                     <div class="o_kio_metric_footer">
@@ -152,7 +152,7 @@
                                     <div class="o_kio_metric_label">Free Capacity</div>
                                     <div class="o_kio_metric_value">
                                         <span class="o_kio_number"><field name="free_capacity"/></span>
-                                        <span class="o_kio_metric_unit">GB</span>
+                                        <span class="o_kio_metric_unit">Mbps</span>
                                     </div>
 
                                     <div class="o_kio_metric_footer">

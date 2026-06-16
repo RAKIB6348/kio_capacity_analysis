@@ -12,3 +12,6 @@ class KioCapacityDashboard(models.Model):
     bandwidth_capacity = fields.Float(string="Bandwidth Capacity", default=0.0)
     mac_capacity = fields.Float(string="MAC Capacity", default=0.0)
     free_capacity = fields.Float(string="Free Capacity", default=0.0)
+    
+    
+
