@@ -1,83 +1,344 @@
-.o_kio_capacity_dashboard {
-    background: #f4f6f8;
-    padding: 24px;
+/* =========================================================
+   KIO CAPACITY DASHBOARD - SAME AS REFERENCE DESIGN
+========================================================= */
 
-    .o_kanban_renderer {
-        min-height: 100%;
-    }
-
-    .o_kanban_record {
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-        background: transparent !important;
-        box-shadow: none !important;
-    }
+/* Odoo Kanban Full Width Fix */
+.o_kanban_renderer.o_kio_capacity_dashboard {
+    display: block !important;
+    width: 100% !important;
+    min-height: calc(100vh - 120px);
+    padding: 38px !important;
+    background:
+        radial-gradient(circle at 12% 10%, rgba(59, 130, 246, 0.08), transparent 30%),
+        radial-gradient(circle at 90% 18%, rgba(14, 165, 233, 0.06), transparent 28%),
+        linear-gradient(180deg, #fbfdff 0%, #f2f7fc 100%);
 }
 
-.o_kio_dashboard_grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(190px, 1fr));
-    gap: 16px;
+.o_kio_capacity_dashboard .o_kanban_record {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.o_kio_capacity_dashboard .o_kanban_record > div {
+    width: 100% !important;
+}
+
+.o_kio_capacity_dashboard .o_kanban_record:hover,
+.o_kio_capacity_dashboard .o_kanban_record:focus {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.o_kio_capacity_dashboard .o_kanban_record::before {
+    display: none !important;
+}
+
+/* Wrapper */
+.o_kio_dashboard_wrapper {
     width: 100%;
+    max-width: 1510px;
+    margin: 0 auto;
 }
 
-.o_kio_metric_card {
+/* Header */
+.o_kio_dashboard_header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 76px;
+}
+
+.o_kio_breadcrumb {
     display: flex;
     align-items: center;
-    min-height: 128px;
-    padding: 22px;
-    border: 1px solid #dfe3e8;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(33, 43, 54, 0.08);
-}
-
-.o_kio_metric_icon {
-    display: grid;
-    place-items: center;
-    flex: 0 0 52px;
-    width: 52px;
-    height: 52px;
-    margin-right: 16px;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 23px;
-}
-
-.o_kio_metric_label {
-    margin-bottom: 5px;
-    color: #637381;
-    font-size: 14px;
+    gap: 14px;
+    margin-bottom: 28px;
+    color: #7c3aed;
+    font-size: 15px;
     font-weight: 600;
 }
 
+.o_kio_breadcrumb i {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.o_kio_breadcrumb_current {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.o_kio_dashboard_title {
+    margin: 0 0 14px 0;
+    color: #0f172a;
+    font-size: 42px;
+    font-weight: 850;
+    letter-spacing: -1.2px;
+    line-height: 1.1;
+}
+
+.o_kio_dashboard_subtitle {
+    margin: 0;
+    color: #64748b;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.o_kio_today_btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 170px;
+    height: 58px;
+    margin-top: 58px;
+    padding: 0 22px;
+    border: 1px solid #dbe3ee;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.82);
+    color: #1e293b;
+    font-size: 18px;
+    font-weight: 650;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+    cursor: pointer;
+}
+
+.o_kio_today_btn i {
+    color: #334155;
+    font-size: 20px;
+}
+
+.o_kio_today_btn .fa-angle-down {
+    margin-left: auto;
+    font-size: 18px;
+}
+
+/* Grid */
+.o_kio_dashboard_grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 38px;
+    width: 100%;
+}
+
+/* Card */
+.o_kio_metric_card {
+    position: relative;
+    min-height: 330px;
+    padding: 48px 36px 40px 36px;
+    overflow: hidden;
+    border: 1px solid rgba(226, 232, 240, 0.95);
+    border-radius: 12px 12px 18px 18px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow:
+        0 22px 48px rgba(15, 23, 42, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.90);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.o_kio_metric_card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 30px 64px rgba(15, 23, 42, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+/* Top accent line */
+.o_kio_top_line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-radius: 12px 12px 0 0;
+}
+
+/* Icon + pattern */
+.o_kio_icon_row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 56px;
+}
+
+.o_kio_metric_icon {
+    position: relative;
+    z-index: 2;
+    width: 86px;
+    height: 86px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 38px;
+    box-shadow: 0 18px 34px rgba(15, 23, 42, 0.16);
+}
+
+.o_kio_dot_pattern {
+    width: 86px;
+    height: 80px;
+    margin-left: -4px;
+    opacity: 0.55;
+    background-image: radial-gradient(currentColor 1.5px, transparent 1.5px);
+    background-size: 12px 12px;
+    color: inherit;
+}
+
+/* Text */
+.o_kio_metric_label {
+    margin-bottom: 18px;
+    color: #64748b;
+    font-size: 17px;
+    font-weight: 850;
+    letter-spacing: 0.6px;
+    line-height: 1.25;
+    text-transform: uppercase;
+}
+
 .o_kio_metric_value {
-    color: #212b36;
-    font-size: 30px;
-    font-weight: 700;
-    line-height: 1.15;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    color: #0f172a;
+    font-size: 48px;
+    font-weight: 850;
+    letter-spacing: -1.2px;
+    line-height: 1.05;
 }
 
-.o_kio_metric_total .o_kio_metric_icon { background: #2563eb; }
-.o_kio_metric_bandwidth .o_kio_metric_icon { background: #0891b2; }
-.o_kio_metric_mac .o_kio_metric_icon { background: #7c3aed; }
-.o_kio_metric_free .o_kio_metric_icon { background: #16803c; }
-
-@media (max-width: 1100px) {
-    .o_kio_dashboard_grid { grid-template-columns: repeat(2, minmax(190px, 1fr)); }
+.o_kio_metric_unit {
+    color: #64748b;
+    font-size: 18px;
+    font-weight: 850;
+    letter-spacing: 0;
 }
 
-@media (max-width: 575px) {
-    .o_kio_capacity_dashboard { padding: 12px; }
-    .o_kio_dashboard_grid { grid-template-columns: 1fr; }
+/* Color Variants */
+.o_kio_metric_total {
+    color: #2563eb;
 }
 
-// This dashboard is a fixed summary, so its kanban search controls are unnecessary.
-.o_view_controller:has(.o_kio_capacity_dashboard) {
-    .o_control_panel_actions .o_searchview,
-    .o_control_panel_navigation .o_searchview_dropdown_toggler {
-        display: none !important;
+.o_kio_metric_total .o_kio_top_line {
+    background: linear-gradient(90deg, #2563eb, #38bdf8);
+}
+
+.o_kio_metric_total .o_kio_metric_icon {
+    background: linear-gradient(135deg, #2563eb, #38bdf8);
+}
+
+.o_kio_metric_bandwidth {
+    color: #0891b2;
+}
+
+.o_kio_metric_bandwidth .o_kio_top_line {
+    background: linear-gradient(90deg, #0891b2, #22d3ee);
+}
+
+.o_kio_metric_bandwidth .o_kio_metric_icon {
+    background: linear-gradient(135deg, #0891b2, #22d3ee);
+}
+
+.o_kio_metric_mac {
+    color: #7c3aed;
+}
+
+.o_kio_metric_mac .o_kio_top_line {
+    background: linear-gradient(90deg, #7c3aed, #6366f1);
+}
+
+.o_kio_metric_mac .o_kio_metric_icon {
+    background: linear-gradient(135deg, #7c3aed, #6366f1);
+}
+
+.o_kio_metric_free {
+    color: #16a34a;
+}
+
+.o_kio_metric_free .o_kio_top_line {
+    background: linear-gradient(90deg, #16a34a, #22c55e);
+}
+
+.o_kio_metric_free .o_kio_metric_icon {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+    .o_kio_dashboard_grid {
+        gap: 24px;
+    }
+
+    .o_kio_metric_card {
+        min-height: 300px;
+        padding: 38px 28px 34px 28px;
+    }
+
+    .o_kio_metric_value {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .o_kio_dashboard_grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .o_kio_dashboard_header {
+        margin-bottom: 48px;
+    }
+}
+
+@media (max-width: 768px) {
+    .o_kanban_renderer.o_kio_capacity_dashboard {
+        padding: 18px !important;
+    }
+
+    .o_kio_dashboard_header {
+        flex-direction: column;
+        margin-bottom: 34px;
+    }
+
+    .o_kio_today_btn {
+        margin-top: 0;
+    }
+
+    .o_kio_dashboard_title {
+        font-size: 32px;
+    }
+
+    .o_kio_dashboard_subtitle {
+        font-size: 15px;
+    }
+
+    .o_kio_dashboard_grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .o_kio_metric_card {
+        min-height: 260px;
+        padding: 30px 24px;
+    }
+
+    .o_kio_icon_row {
+        margin-bottom: 36px;
+    }
+
+    .o_kio_metric_icon {
+        width: 74px;
+        height: 74px;
+        font-size: 32px;
+    }
+
+    .o_kio_metric_value {
+        font-size: 36px;
     }
 }
