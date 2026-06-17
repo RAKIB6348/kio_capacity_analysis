@@ -114,12 +114,6 @@
         </field>
     </record>
 
-    <record id="action_kio_capacity_dashboard" model="ir.actions.act_window">
-        <field name="name">Capacity Dashboard</field>
-        <field name="res_model">kio.capacity.dashboard</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-
     <record id="action_kio_capacity_dashboard_customer" model="ir.actions.act_window">
         <field name="name">Customer Capacity Details</field>
         <field name="res_model">kio.capacity.dashboard.customer</field>

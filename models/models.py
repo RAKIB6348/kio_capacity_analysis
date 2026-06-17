@@ -17,6 +17,20 @@ class KioCapacityDashboard(models.Model):
         "dashboard_id",
         string="Customer Capacity Details",
     )
-    
-    
 
+    def action_open_bandwidth_customers(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Bandwidth Customers",
+            "res_model": "kio.capacity.dashboard.customer",
+            "view_mode": "tree,form",
+            "domain": [
+                ("dashboard_id", "=", self.id),
+                ("client_type", "=", "bandwith"),
+            ],
+            "context": {
+                "default_dashboard_id": self.id,
+                "default_client_type": "bandwith",
+            },
+        }
