@@ -116,6 +116,8 @@ class KioCapacityDashboard(models.Model):
             ],
             "context": {
                 "default_client_type": "bandwith",
+                "create" : False,
+                "edit" : False,
             },
             "target": "current",
         }
