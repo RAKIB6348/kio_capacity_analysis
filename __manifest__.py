@@ -7,12 +7,11 @@
     'website': "https://www.yourcompany.com",
     'category': 'Operations',
     'version': '17.0.1.0.0',
-    'depends': ['base', 'web', 'kio_isp_management'],
+    'depends': ['base', 'web'],
     'data': [
         'security/ir.model.access.csv',
         'data/capacity_dashboard_data.xml',
         'views/views.xml',
-        # 'views/kio_capacity_dashboard_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
