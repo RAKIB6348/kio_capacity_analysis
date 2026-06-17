@@ -194,7 +194,6 @@
                 <field name="partner_id"/>
                 <field name="client_type"/>
                 <field name="bandwidth_capacity"/>
-                <field name="mac_capacity"/>
                 <field name="total_capacity"/>
                 <field name="offer_total_price"/>
                 <field name="confirmed_date"/>
@@ -219,7 +218,6 @@
 
                     <group string="Capacity Summary">
                         <field name="bandwidth_capacity"/>
-                        <field name="mac_capacity"/>
                         <field name="total_capacity"/>
                         <field name="offer_total_price"/>
                     </group>
