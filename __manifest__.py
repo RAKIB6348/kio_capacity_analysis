@@ -14,9 +14,12 @@
         'data/upstream_purchase_sequence.xml',
         'views/views.xml',
         'views/upstream_purchase_views.xml',
+        'views/capacity_dashboard_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
+            'kio_capacity_analysis/static/src/js/capacity_dashboard.js',
+            'kio_capacity_analysis/static/src/xml/capacity_dashboard.xml',
             'kio_capacity_analysis/static/src/scss/capacity_dashboard.scss',
         ],
     },
