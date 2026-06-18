@@ -3,3 +3,4 @@ access_kio_capacity_dashboard,kio.capacity.dashboard,model_kio_capacity_dashboar
 access_kio_capacity_dashboard_customer_user,kio.capacity.dashboard.customer.user,model_kio_capacity_dashboard_customer,base.group_user,1,1,1,0
 access_kio_capacity_dashboard_customer_line_user,kio.capacity.dashboard.customer.line.user,model_kio_capacity_dashboard_customer_line,base.group_user,1,1,1,0
 access_kio_capacity_upstream_purchase_user,kio.capacity.upstream.purchase.user,model_kio_capacity_upstream_purchase,base.group_user,1,1,1,1
+access_kio_capacity_upstream_purchase_line_user,kio.capacity.upstream.purchase.line.user,model_kio_capacity_upstream_purchase_line,base.group_user,1,1,1,1
