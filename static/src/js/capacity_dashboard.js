@@ -13,9 +13,9 @@ export class KioCapacityDashboard extends Component {
             summary: {
                 totalActiveCapacity: 0,
                 totalSpend: 0,
-                totalProviders: 0,
+                totalCapacityItems: 0,
             },
-            providers: [],
+            capacityItems: [],
         });
 
         onWillStart(async () => {
@@ -24,63 +24,88 @@ export class KioCapacityDashboard extends Component {
     }
 
     async loadDashboardData() {
-        const purchases = await this.orm.searchRead(
-            "kio.capacity.upstream.purchase",
+        const capacityItems = await this.orm.searchRead(
+            "kio.capacity.item",
+            [],
+            ["name", "active", "sequence"],
+            { context: { active_test: false } }
+        );
+        const purchaseLines = await this.orm.searchRead(
+            "kio.capacity.upstream.purchase.line",
             [],
             [
-                "provider_id",
+                "capacity_item_id",
                 "purchased_capacity",
                 "price",
-                "reference",
-                "active",
-                "responsible_user_id",
-                "purchase_date",
+                "total_price",
+                "purchase_id",
             ],
             { context: { active_test: false } }
         );
+        const purchases = await this.orm.searchRead(
+            "kio.capacity.upstream.purchase",
+            [],
+            ["active"],
+            { context: { active_test: false } }
+        );
+        const activePurchaseIds = new Set(
+            purchases.filter((purchase) => purchase.active).map((purchase) => purchase.id)
+        );
 
-        const providerMap = new Map();
+        const itemMap = new Map();
         let totalActiveCapacity = 0;
         let totalSpend = 0;
 
-        for (const purchase of purchases) {
-            const providerId = purchase.provider_id ? purchase.provider_id[0] : false;
-            const providerName = purchase.provider_id ? purchase.provider_id[1] : "No Provider";
-            const mapKey = providerId || "no_provider";
-            const capacity = purchase.purchased_capacity || 0;
-            const price = purchase.price || 0;
+        for (const item of capacityItems) {
+            itemMap.set(item.id, {
+                itemId: item.id,
+                itemName: item.name,
+                active: item.active,
+                sequence: item.sequence || 10,
+                totalCapacity: 0,
+                totalPrice: 0,
+                purchaseCount: 0,
+            });
+        }
 
-            if (!providerMap.has(mapKey)) {
-                providerMap.set(mapKey, {
-                    providerId,
-                    providerName,
+        for (const line of purchaseLines) {
+            const itemId = line.capacity_item_id ? line.capacity_item_id[0] : false;
+            const itemName = line.capacity_item_id ? line.capacity_item_id[1] : "No Capacity Item";
+            const mapKey = itemId || "no_item";
+            const capacity = line.purchased_capacity || 0;
+            const totalPrice = line.total_price || 0;
+
+            if (!itemMap.has(mapKey)) {
+                itemMap.set(mapKey, {
+                    itemId,
+                    itemName,
+                    active: false,
+                    sequence: 9999,
                     totalCapacity: 0,
                     totalPrice: 0,
-                    activeCount: 0,
-                    totalCount: 0,
+                    purchaseCount: 0,
                 });
             }
 
-            const provider = providerMap.get(mapKey);
-            provider.totalCapacity += capacity;
-            provider.totalPrice += price;
-            provider.totalCount += 1;
+            const item = itemMap.get(mapKey);
+            item.totalCapacity += capacity;
+            item.totalPrice += totalPrice;
+            item.purchaseCount += 1;
 
-            if (purchase.active) {
-                provider.activeCount += 1;
+            if (line.purchase_id && activePurchaseIds.has(line.purchase_id[0])) {
                 totalActiveCapacity += capacity;
             }
 
-            totalSpend += price;
+            totalSpend += totalPrice;
         }
 
         this.state.summary = {
             totalActiveCapacity,
             totalSpend,
-            totalProviders: providerMap.size,
+            totalCapacityItems: itemMap.size,
         };
-        this.state.providers = Array.from(providerMap.values()).sort((a, b) =>
-            a.providerName.localeCompare(b.providerName)
+        this.state.capacityItems = Array.from(itemMap.values()).sort((a, b) =>
+            (a.sequence - b.sequence) || a.itemName.localeCompare(b.itemName)
         );
         this.state.loading = false;
     }
@@ -91,14 +116,14 @@ export class KioCapacityDashboard extends Component {
         });
     }
 
-    openProviderPurchases(provider) {
-        const domain = provider.providerId
-            ? [["provider_id", "=", provider.providerId]]
-            : [["provider_id", "=", false]];
+    openCapacityItemPurchases(item) {
+        const domain = item.itemId
+            ? [["line_ids.capacity_item_id", "=", item.itemId]]
+            : [["line_ids.capacity_item_id", "=", false]];
 
         this.action.doAction({
             type: "ir.actions.act_window",
-            name: provider.providerName,
+            name: item.itemName,
             res_model: "kio.capacity.upstream.purchase",
             views: [[false, "tree"], [false, "form"]],
             view_mode: "tree,form",
@@ -107,11 +132,12 @@ export class KioCapacityDashboard extends Component {
             target: "current",
         });
     }
-    openUpstreamPurchaseForm() {
+
+    openCapacityItemForm() {
         this.action.doAction({
             type: "ir.actions.act_window",
-            name: "Upstream Capacity Purchase",
-            res_model: "kio.capacity.upstream.purchase",
+            name: "Capacity Item",
+            res_model: "kio.capacity.item",
             views: [[false, "form"]],
             view_mode: "form",
             target: "current",
