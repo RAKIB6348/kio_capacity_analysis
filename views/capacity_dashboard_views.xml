@@ -5,9 +5,9 @@
         <field name="tag">kio_capacity_analysis.capacity_dashboard</field>
     </record>
 
-    <menuitem id="menu_kio_capacity_client_dashboard"
+    <!-- <menuitem id="menu_kio_capacity_client_dashboard"
               name="Provider Dashboard"
               parent="menu_kio_capacity_root"
               action="action_kio_capacity_client_dashboard"
-              sequence="15"/>
+              sequence="15"/> -->
 </odoo>
