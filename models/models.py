@@ -126,8 +126,8 @@ class KioCapacityDashboard(models.Model):
         return final_capacity, base_capacity, upgrade_capacity, downgrade_capacity
 
     def _get_total_upstream_capacity(self):
-        grouped_capacity = self.env["kio.capacity.upstream.purchase"].sudo().read_group(
-            [("active", "=", True)],
+        grouped_capacity = self.env["kio.capacity.upstream.purchase.line"].sudo().read_group(
+            [("purchase_id.active", "=", True)],
             ["purchased_capacity:sum"],
             [],
         )
@@ -255,14 +255,12 @@ class KioCapacityDashboard(models.Model):
 
     def action_open_upstream_purchases(self):
         self.ensure_one()
-        return {
-            "type": "ir.actions.act_window",
-            "name": "Total Upstream Capacity",
-            "res_model": "kio.capacity.upstream.purchase",
-            "view_mode": "kanban,tree,form",
-            "context": {
-                "group_by": "provider_id",
-            },
-            "target": "current",
+        action = self.env["ir.actions.actions"]._for_xml_id(
+            "kio_capacity_analysis.action_kio_capacity_upstream_purchase"
+        )
+        action["context"] = {
+            "search_default_active": 1,
+            "active_test": False,
+            "group_by": "provider_id",
         }
-
+        return action
