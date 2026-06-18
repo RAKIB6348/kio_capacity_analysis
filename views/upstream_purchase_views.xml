@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_kio_capacity_upstream_purchase_kanban" model="ir.ui.view">
+        <field name="name">kio.capacity.upstream.purchase.kanban</field>
+        <field name="model">kio.capacity.upstream.purchase</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="provider_id" class="o_kanban_small_column">
+                <field name="sequence"/>
+                <field name="reference"/>
+                <field name="provider_id"/>
+                <field name="capacity_item"/>
+                <field name="purchased_capacity"/>
+                <field name="price"/>
+                <field name="purchase_date"/>
+                <field name="active"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <strong class="o_kanban_record_title">
+                                    <field name="capacity_item"/>
+                                </strong>
+                            </div>
+                            <div class="o_kanban_record_body mt8">
+                                <div>
+                                    <span class="text-muted">Reference:</span>
+                                    <field name="reference"/>
+                                </div>
+                                <div>
+                                    <span class="text-muted">Sequence:</span>
+                                    <field name="sequence"/>
+                                </div>
+                                <div>
+                                    <span class="text-muted">Provider:</span>
+                                    <field name="provider_id"/>
+                                </div>
+                                <div>
+                                    <span class="text-muted">Capacity:</span>
+                                    <strong><field name="purchased_capacity"/> Mbps</strong>
+                                </div>
+                                <div>
+                                    <span class="text-muted">Price:</span>
+                                    <field name="price"/>
+                                </div>
+                                <div>
+                                    <span class="text-muted">Purchase Date:</span>
+                                    <field name="purchase_date"/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="active" widget="boolean_toggle"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_kio_capacity_upstream_purchase_tree" model="ir.ui.view">
+        <field name="name">kio.capacity.upstream.purchase.tree</field>
+        <field name="model">kio.capacity.upstream.purchase</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="reference" readonly="1"/>
+                <field name="provider_id"/>
+                <field name="capacity_item"/>
+                <field name="purchased_capacity" sum="Total Mbps"/>
+                <field name="price" sum="Total Price"/>
+                <field name="purchase_date"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_kio_capacity_upstream_purchase_form" model="ir.ui.view">
+        <field name="name">kio.capacity.upstream.purchase.form</field>
+        <field name="model">kio.capacity.upstream.purchase</field>
+        <field name="arch" type="xml">
+            <form string="Upstream Capacity Purchase">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="reference" readonly="1"/>
+                            <field name="sequence"/>
+                            <field name="provider_id"/>
+                            <field name="capacity_item" placeholder="Internet Bandwidth"/>
+                            <field name="purchased_capacity"/>
+                            <field name="price"/>
+                        </group>
+                        <group>
+                            <field name="purchase_date"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_kio_capacity_upstream_purchase" model="ir.actions.act_window">
+        <field name="name">Total Upstream Capacity</field>
+        <field name="res_model">kio.capacity.upstream.purchase</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{'group_by': 'provider_id'}</field>
+    </record>
+
+    <menuitem id="menu_kio_capacity_upstream_purchase"
+              name="Upstream Purchases"
+              parent="menu_kio_capacity_root"
+              action="action_kio_capacity_upstream_purchase"
+              sequence="20"/>
+
+</odoo>

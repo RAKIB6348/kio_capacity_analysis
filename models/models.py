@@ -14,6 +14,12 @@ class KioCapacityDashboard(models.Model):
 
     name = fields.Char(default="Capacity Overview", required=True)
 
+    total_upstream_capacity = fields.Float(
+        string="Total Upstream Capacity",
+        compute="_compute_realtime_capacity",
+        store=False,
+    )
+
     total_capacity = fields.Float(
         string="Total Capacity",
         compute="_compute_realtime_capacity",
@@ -119,9 +125,20 @@ class KioCapacityDashboard(models.Model):
 
         return final_capacity, base_capacity, upgrade_capacity, downgrade_capacity
 
+    def _get_total_upstream_capacity(self):
+        grouped_capacity = self.env["kio.capacity.upstream.purchase"].sudo().read_group(
+            [("active", "=", True)],
+            ["purchased_capacity:sum"],
+            [],
+        )
+        if not grouped_capacity:
+            return 0.0
+        return grouped_capacity[0].get("purchased_capacity", 0.0) or 0.0
+
     @api.depends_context("uid")
     def _compute_realtime_capacity(self):
         Client = self.env["isp.client"].sudo()
+        total_upstream_capacity = self._get_total_upstream_capacity()
 
         active_bandwidth_clients = Client.search([
             ("active", "=", True),
@@ -170,6 +187,7 @@ class KioCapacityDashboard(models.Model):
         )
 
         for dashboard in self:
+            dashboard.total_upstream_capacity = total_upstream_capacity
             dashboard.total_capacity = total_final_capacity
             dashboard.bandwidth_capacity = total_final_capacity
             dashboard.mac_capacity = 0.0
@@ -234,3 +252,17 @@ class KioCapacityDashboard(models.Model):
             },
             "target": "current",
         }
+
+    def action_open_upstream_purchases(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Total Upstream Capacity",
+            "res_model": "kio.capacity.upstream.purchase",
+            "view_mode": "kanban,tree,form",
+            "context": {
+                "group_by": "provider_id",
+            },
+            "target": "current",
+        }
+

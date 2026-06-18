@@ -6,7 +6,7 @@
         <field name="model">kio.capacity.dashboard</field>
         <field name="arch" type="xml">
             <kanban class="o_kio_capacity_dashboard" create="false" edit="false" delete="false">
-<!--                <field name="total_upstream_capacity"/>-->
+                <field name="total_upstream_capacity"/>
                 <field name="total_capacity"/>
                 <field name="free_capacity"/>
                 <field name="bandwidth_capacity"/>
@@ -50,7 +50,8 @@
                             <div class="o_kio_dashboard_grid">
 
                                 <!-- 1. Total Upstream Capacity -->
-                                <div class="o_kio_metric_card o_kio_metric_total">
+                                <a type="object" name="action_open_upstream_purchases"
+                                   class="o_kio_metric_card o_kio_metric_total o_kanban_action">
                                     <div class="o_kio_top_line"></div>
                                     <div class="o_kio_card_glow"></div>
                                     <div class="o_kio_card_header">
@@ -65,11 +66,11 @@
                                     <div class="o_kio_metric_label">Total Upstream Capacity</div>
                                     <div class="o_kio_metric_value">
                                         <span class="o_kio_number">
-<!--                                            <field name="total_upstream_capacity"/>-->
+                                            <field name="total_upstream_capacity"/>
                                         </span>
                                         <span class="o_kio_metric_unit">Mbps</span>
                                     </div>
-                                </div>
+                                </a>
 
                                 <!-- 2. Total Downstream Capacity -->
                                 <div class="o_kio_metric_card o_kio_metric_total">
@@ -262,5 +263,6 @@
               parent="menu_kio_capacity_root"
               action="action_kio_capacity_dashboard"
               sequence="10"/>
+
 
 </odoo>

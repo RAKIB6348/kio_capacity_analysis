@@ -11,7 +11,9 @@
     'data': [
         'security/ir.model.access.csv',
         'data/capacity_dashboard_data.xml',
+        'data/upstream_purchase_sequence.xml',
         'views/views.xml',
+        'views/upstream_purchase_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
