@@ -12,6 +12,7 @@
         'security/ir.model.access.csv',
         'data/capacity_dashboard_data.xml',
         'data/upstream_purchase_sequence.xml',
+        'reports/upstream_purchase_report.xml',
         'views/views.xml',
         'views/upstream_purchase_views.xml',
         'views/capacity_dashboard_views.xml',

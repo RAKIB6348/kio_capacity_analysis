@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_kio_capacity_upstream_purchase" model="ir.actions.report">
+        <field name="name">Upstream Capacity Purchase</field>
+        <field name="model">kio.capacity.upstream.purchase</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">kio_capacity_analysis.report_kio_capacity_upstream_purchase_document</field>
+        <field name="report_file">kio_capacity_analysis.report_kio_capacity_upstream_purchase_document</field>
+        <field name="print_report_name">'Upstream Capacity Purchase - %s' % (object.reference or object.name)</field>
+        <field name="binding_model_id" ref="model_kio_capacity_upstream_purchase"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_kio_capacity_upstream_purchase_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+
+                        <h2>Upstream Capacity Purchase</h2>
+
+                        <div class="row mt16 mb16">
+                            <div class="col-6">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td><strong>Reference</strong></td>
+                                        <td><span t-field="o.reference"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Provider</strong></td>
+                                        <td><span t-field="o.provider_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Responsible By</strong></td>
+                                        <td><span t-field="o.responsible_user_id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Status</strong></td>
+                                        <td>
+                                            <span t-if="o.active">Active</span>
+                                            <span t-else="">Archived</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td><strong>Purchase Date</strong></td>
+                                        <td><span t-field="o.purchase_date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Contract Start Date</strong></td>
+                                        <td><span t-field="o.contract_start_date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Contract End Date</strong></td>
+                                        <td><span t-field="o.contract_end_date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Capacity Items</strong></td>
+                                        <td><span t-field="o.capacity_item"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th>Capacity Item</th>
+                                    <th class="text-end">Capacity (Mbps)</th>
+                                    <th class="text-end">Price</th>
+                                    <th class="text-end">Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <td><span t-esc="line_index + 1"/></td>
+                                    <td><span t-field="line.capacity_item_id"/></td>
+                                    <td class="text-end">
+                                        <span t-esc="'{:,.2f}'.format(line.purchased_capacity or 0.0)"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-esc="'{:,.2f}'.format(line.price or 0.0)"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-esc="'{:,.2f}'.format(line.total_price or 0.0)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row justify-content-end mt16">
+                            <div class="col-5">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Total Capacity (Mbps)</strong></td>
+                                        <td class="text-end">
+                                            <strong t-esc="'{:,.2f}'.format(o.purchased_capacity or 0.0)"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Price</strong></td>
+                                        <td class="text-end">
+                                            <strong t-esc="'{:,.2f}'.format(o.price or 0.0)"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
