@@ -16,10 +16,10 @@ class KioCapacityUpstreamPurchaseLine(models.Model):
         required=True,
         ondelete="cascade",
     )
-    capacity_item = fields.Char(
+    capacity_item_id = fields.Many2one(
+        "kio.capacity.item",
         string="Capacity Item",
         required=True,
-        help="Example: Internet Bandwidth, NTTN Capacity, IP Transit.",
     )
     purchased_capacity = fields.Float(
         string="Purchased Capacity (Mbps)",
