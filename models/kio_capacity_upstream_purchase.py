@@ -61,6 +61,8 @@ class KioCapacityUpstreamPurchase(models.Model):
         required=True,
         tracking=True,
     )
+    contract_start_date = fields.Date(string="Contract Start Date", tracking=True)
+    contract_end_date = fields.Date(string="Contract End Date", tracking=True)
     active = fields.Boolean(string="Active Status", default=True, tracking=True)
     line_ids = fields.One2many(
         "kio.capacity.upstream.purchase.line",

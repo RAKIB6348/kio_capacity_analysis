@@ -14,6 +14,8 @@
                 <field name="purchased_capacity"/>
                 <field name="price"/>
                 <field name="purchase_date"/>
+                <field name="contract_start_date"/>
+                <field name="contract_end_date"/>
                 <field name="active"/>
                 <templates>
                     <t t-name="kanban-box">
@@ -48,6 +50,14 @@
                                     <span class="text-muted">Purchase Date:</span>
                                     <field name="purchase_date"/>
                                 </div>
+                                <div>
+                                    <span class="text-muted">Contract Start:</span>
+                                    <field name="contract_start_date"/>
+                                </div>
+                                <div>
+                                    <span class="text-muted">Contract End:</span>
+                                    <field name="contract_end_date"/>
+                                </div>
                             </div>
                             <div class="o_kanban_record_bottom">
                                 <div class="oe_kanban_bottom_left">
@@ -71,6 +81,8 @@
                 <field name="provider_id"/>
                 <field name="responsible_user_id" widget="many2one_avatar_user"/>
                 <field name="purchase_date"/>
+                <field name="contract_start_date"/>
+                <field name="contract_end_date"/>
                 <field name="capacity_item" readonly="1"/>
                 <field name="purchased_capacity" sum="Total Capacity (Mbps)" readonly="1"/>
                 <field name="price" sum="Total Price" readonly="1"/>
@@ -89,6 +101,8 @@
                 <field name="provider_id"/>
                 <field name="responsible_user_id"/>
                 <field name="capacity_item"/>
+                <field name="contract_start_date"/>
+                <field name="contract_end_date"/>
                 <filter string="Active" name="active" domain="[('active', '=', True)]"/>
                 <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
                 <filter string="My Purchases" name="my_purchases" domain="[('responsible_user_id', '=', uid)]"/>
@@ -124,7 +138,9 @@
                         </group>
                         <group string="Control">
                             <field name="responsible_user_id" readonly="1"/>
-                            <field name="active"/>
+                            <field name="active" invisible="1"/>
+                            <field name="contract_start_date"/>
+                            <field name="contract_end_date"/>
                         </group>
                     </group>
 
