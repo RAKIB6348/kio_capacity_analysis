@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+import logging
+
+from odoo import api, fields, models
+
+
+_logger = logging.getLogger(__name__)
 
 
 class KioCapacityDashboard(models.Model):
@@ -52,53 +56,68 @@ class KioCapacityDashboard(models.Model):
         string="Customer Capacity Details",
     )
 
-    def _get_capacity_in_mbps_from_offer_line(self, line):
-        capacity = line.capacity or 0.0
-        if not capacity:
-            return 0.0
+    def _get_request_entered_capacity(self, request):
+        entered_capacity = sum(request.line_ids.mapped("entered_capacity"))
 
-        parameter = line.parameter if "parameter" in line._fields else "mb"
-
-        if parameter == "gb":
-            mb_value = self.env["ir.config_parameter"].sudo().get_param(
-                "isp.mb_value",
-                default="0",
+        if not entered_capacity:
+            entered_capacity = (
+                request.entered_capacity_total
+                or request.entered_capacity
+                or 0.0
             )
-            try:
-                mb_factor = float(mb_value)
-            except (TypeError, ValueError):
-                mb_factor = 0.0
 
-            if mb_factor <= 0.0:
-                raise ValidationError(
-                    _("Please configure a positive 'MB Value' in Settings > ISP Configuration to convert GB capacities.")
-                )
+        return entered_capacity
 
-            return capacity * mb_factor
-
-        return capacity
-
-
-    def _get_change_request_capacity_totals(self):
+    def _get_client_realtime_capacity(self, client):
         ChangeRequest = self.env["isp.portal.change.request"].sudo()
-        requests = ChangeRequest.search([
-            ("request_type", "in", ["upgrade", "downgrade"]),
-            ("client_id.active", "=", True),
-            ("client_id.client_type", "=", "bandwith"),
-        ])
 
+        requests = ChangeRequest.search([
+            ("client_id", "=", client.id),
+            ("request_type", "in", ["upgrade", "downgrade"]),
+        ], order="submitted_on asc, id asc")
+
+        fallback_base_capacity = sum(client.offer_capacity_type_ids.mapped("capacity"))
+
+        base_capacity = fallback_base_capacity
         upgrade_capacity = 0.0
         downgrade_capacity = 0.0
+
+        if not requests:
+            return base_capacity, base_capacity, 0.0, 0.0
+
+        first_request = requests[0]
+
+        base_capacity = (
+                first_request.current_capacity_total
+                or first_request.current_capacity
+                or fallback_base_capacity
+                or 0.0
+        )
+
         for request in requests:
-            current_capacity = request.current_capacity_total or request.current_capacity or 0.0
-            requested_capacity = request.requested_capacity_total or request.requested_capacity or 0.0
+            entered_capacity = self._get_request_entered_capacity(request)
 
             if request.request_type == "upgrade":
-                upgrade_capacity += max(requested_capacity - current_capacity, 0.0)
-            elif request.request_type == "downgrade":
-                downgrade_capacity += max(current_capacity - requested_capacity, 0.0)
+                upgrade_capacity += max(entered_capacity, 0.0)
 
-        return upgrade_capacity, downgrade_capacity
+            elif request.request_type == "downgrade":
+                downgrade_capacity += max(entered_capacity, 0.0)
+
+            _logger.info(
+                "[KIO Capacity Dashboard] Client=%s Request ID=%s Type=%s Current=%s Entered=%s",
+                client.display_name,
+                request.id,
+                request.request_type,
+                request.current_capacity_total or request.current_capacity or 0.0,
+                entered_capacity,
+            )
+
+        final_capacity = base_capacity + upgrade_capacity - downgrade_capacity
+
+        if final_capacity < 0:
+            final_capacity = 0.0
+
+        return final_capacity, base_capacity, upgrade_capacity, downgrade_capacity
 
     @api.depends_context("uid")
     def _compute_realtime_capacity(self):
@@ -110,25 +129,53 @@ class KioCapacityDashboard(models.Model):
             ("pipeline_state", "=", "noc_confirm"),
         ])
 
-        bandwidth_capacity = 0.0
+        total_final_capacity = 0.0
+        total_base_capacity = 0.0
+        total_upgrade_capacity = 0.0
+        total_downgrade_capacity = 0.0
+
+        _logger.info(
+            "[KIO Capacity Dashboard] Active NOC confirmed bandwidth clients found: %s",
+            len(active_bandwidth_clients),
+        )
 
         for client in active_bandwidth_clients:
-            for line in client.offer_capacity_type_ids:
-                bandwidth_capacity += self._get_capacity_in_mbps_from_offer_line(line)
+            (
+                client_final_capacity,
+                client_base_capacity,
+                client_upgrade_capacity,
+                client_downgrade_capacity,
+            ) = self._get_client_realtime_capacity(client)
 
-        upgrade_capacity, downgrade_capacity = self._get_change_request_capacity_totals()
+            total_final_capacity += client_final_capacity
+            total_base_capacity += client_base_capacity
+            total_upgrade_capacity += client_upgrade_capacity
+            total_downgrade_capacity += client_downgrade_capacity
 
-        mac_capacity = 0.0
-        free_capacity = 0.0
+            _logger.info(
+                "[KIO Capacity Dashboard] Client=%s Base=%s Upgrade=%s Downgrade=%s Final=%s",
+                client.display_name,
+                client_base_capacity,
+                client_upgrade_capacity,
+                client_downgrade_capacity,
+                client_final_capacity,
+            )
+
+        _logger.info(
+            "[KIO Capacity Dashboard] Total Base=%s Total Upgrade=%s Total Downgrade=%s Total Final=%s",
+            total_base_capacity,
+            total_upgrade_capacity,
+            total_downgrade_capacity,
+            total_final_capacity,
+        )
 
         for dashboard in self:
-            dashboard.bandwidth_capacity = bandwidth_capacity
-            dashboard.mac_capacity = mac_capacity
-            dashboard.upgrade_capacity = upgrade_capacity
-            dashboard.downgrade_capacity = downgrade_capacity
-            dashboard.total_capacity = bandwidth_capacity + mac_capacity
-            dashboard.free_capacity = free_capacity
-
+            dashboard.total_capacity = total_final_capacity
+            dashboard.bandwidth_capacity = total_final_capacity
+            dashboard.mac_capacity = 0.0
+            dashboard.free_capacity = 0.0
+            dashboard.upgrade_capacity = total_upgrade_capacity
+            dashboard.downgrade_capacity = total_downgrade_capacity
 
     def action_open_upgrade_requests(self):
         self.ensure_one()
@@ -148,7 +195,6 @@ class KioCapacityDashboard(models.Model):
             },
             "target": "current",
         }
-
 
     def action_open_downgrade_requests(self):
         self.ensure_one()
@@ -171,7 +217,6 @@ class KioCapacityDashboard(models.Model):
 
     def action_open_bandwidth_customers(self):
         self.ensure_one()
-
         return {
             "type": "ir.actions.act_window",
             "name": "Active Bandwidth Customers",
@@ -184,8 +229,8 @@ class KioCapacityDashboard(models.Model):
             ],
             "context": {
                 "default_client_type": "bandwith",
-                "create" : False,
-                "edit" : False,
+                "create": False,
+                "edit": False,
             },
             "target": "current",
         }
