@@ -166,7 +166,7 @@
                                     <div class="o_kio_card_glow"></div>
                                     <div class="o_kio_card_header">
                                         <div class="o_kio_metric_icon">
-                                            <i class="fa-solid fa-sitemap"/>
+                                            <i class="fa fa-sitemap"/>
                                         </div>
                                         <div class="o_kio_status_badge">
                                             <span class="o_kio_status_dot stable"></span>
