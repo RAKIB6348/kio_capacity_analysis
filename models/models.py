@@ -255,12 +255,6 @@ class KioCapacityDashboard(models.Model):
 
     def action_open_upstream_purchases(self):
         self.ensure_one()
-        action = self.env["ir.actions.actions"]._for_xml_id(
-            "kio_capacity_analysis.action_kio_capacity_upstream_purchase"
+        return self.env["ir.actions.actions"]._for_xml_id(
+            "kio_capacity_analysis.action_kio_capacity_client_dashboard"
         )
-        action["context"] = {
-            "search_default_active": 1,
-            "active_test": False,
-            "group_by": "provider_id",
-        }
-        return action
