@@ -5,12 +5,16 @@ import { useService } from "@web/core/utils/hooks";
 import { Component, onWillStart, useState } from "@odoo/owl";
 import { getVendorBillDomain, loadVendorBillComparison } from "./vendor_bill_comparison";
 
+const SELECTED_ITEM_STORAGE_KEY = "kio_capacity_selected_item";
+const CURRENT_VIEW_STORAGE_KEY = "kio_capacity_current_view";
+
 export class KioCapacityDashboard extends Component {
     setup() {
         this.orm = useService("orm");
         this.action = useService("action");
 
         const currentMonthRange = this.getCurrentMonthRange();
+        const restoredState = this.getRestoredComparisonState();
 
         this.state = useState({
             loading: true,
@@ -20,9 +24,10 @@ export class KioCapacityDashboard extends Component {
                 totalCapacityItems: 0,
             },
             capacityItems: [],
-            dateFrom: currentMonthRange.dateFrom,
-            dateTo: currentMonthRange.dateTo,
-            selectedItem: null,
+            currentView: restoredState ? "comparison" : "dashboard",
+            dateFrom: restoredState ? restoredState.dateFrom : currentMonthRange.dateFrom,
+            dateTo: restoredState ? restoredState.dateTo : currentMonthRange.dateTo,
+            selectedItem: restoredState ? restoredState.selectedItem : null,
             comparisonLoading: false,
             vendorRows: [],
             comparisonSummary: {
@@ -35,8 +40,57 @@ export class KioCapacityDashboard extends Component {
         });
 
         onWillStart(async () => {
-            await this.loadDashboardData();
+            if (this.state.currentView === "comparison" && this.state.selectedItem) {
+                await this.loadVendorComparisonData();
+            } else {
+                await this.loadDashboardData();
+            }
         });
+    }
+
+    getRestoredComparisonState() {
+        const currentView = sessionStorage.getItem(CURRENT_VIEW_STORAGE_KEY);
+        const savedItem = sessionStorage.getItem(SELECTED_ITEM_STORAGE_KEY);
+        if (currentView !== "comparison" || !savedItem) {
+            return null;
+        }
+
+        try {
+            const parsedItem = JSON.parse(savedItem);
+            const { dateFrom, dateTo, ...selectedItem } = parsedItem;
+
+            if (!selectedItem || !selectedItem.itemId) {
+                return null;
+            }
+
+            const currentMonthRange = this.getCurrentMonthRange();
+            return {
+                selectedItem,
+                dateFrom: dateFrom || currentMonthRange.dateFrom,
+                dateTo: dateTo || currentMonthRange.dateTo,
+            };
+        } catch (error) {
+            console.error("Capacity Comparison Restore Error:", error);
+            sessionStorage.removeItem(CURRENT_VIEW_STORAGE_KEY);
+            sessionStorage.removeItem(SELECTED_ITEM_STORAGE_KEY);
+            return null;
+        }
+    }
+
+    saveComparisonState() {
+        if (!this.state.selectedItem) {
+            return;
+        }
+
+        sessionStorage.setItem(CURRENT_VIEW_STORAGE_KEY, "comparison");
+        sessionStorage.setItem(
+            SELECTED_ITEM_STORAGE_KEY,
+            JSON.stringify({
+                ...this.state.selectedItem,
+                dateFrom: this.state.dateFrom,
+                dateTo: this.state.dateTo,
+            })
+        );
     }
 
     async loadDashboardData() {
@@ -184,6 +238,7 @@ export class KioCapacityDashboard extends Component {
     async onDateRangeChange(field, value) {
         this.state[field] = value;
         if (this.state.selectedItem) {
+            this.saveComparisonState();
             await this.loadVendorComparisonData();
         } else {
             await this.loadDashboardData();
@@ -195,6 +250,7 @@ export class KioCapacityDashboard extends Component {
         this.state.dateFrom = currentMonthRange.dateFrom;
         this.state.dateTo = currentMonthRange.dateTo;
         if (this.state.selectedItem) {
+            this.saveComparisonState();
             await this.loadVendorComparisonData();
         } else {
             await this.loadDashboardData();
@@ -253,10 +309,15 @@ export class KioCapacityDashboard extends Component {
 
     async openCapacityItemPurchases(item) {
         this.state.selectedItem = item;
+        this.state.currentView = "comparison";
+        this.saveComparisonState();
         await this.loadVendorComparisonData();
     }
 
-    backToDashboard() {
+    async backToDashboard() {
+        sessionStorage.removeItem(CURRENT_VIEW_STORAGE_KEY);
+        sessionStorage.removeItem(SELECTED_ITEM_STORAGE_KEY);
+        this.state.currentView = "dashboard";
         this.state.selectedItem = null;
         this.state.vendorRows = [];
         this.state.comparisonSummary = {
@@ -266,6 +327,9 @@ export class KioCapacityDashboard extends Component {
             totalSpend: 0,
             averagePrice: 0,
         };
+        if (!this.state.capacityItems.length) {
+            await this.loadDashboardData();
+        }
     }
 
     async loadVendorComparisonData() {

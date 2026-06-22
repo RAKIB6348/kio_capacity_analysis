@@ -95,7 +95,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <t t-foreach="state.vendorRows" t-as="row" t-key="row.vendorId || row.vendorName">
+                                <t t-foreach="state.vendorRows" t-as="row" t-key="`${row.vendorId || row.vendorName}-${row.startDate || 'no_start'}-${row.endDate || 'no_end'}-${row.averagePrice}-${row_index}`">
                                     <tr>
                                         <td><t t-esc="row_index + 1"/></td>
                                         <td>
