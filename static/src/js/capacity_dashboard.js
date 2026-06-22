@@ -9,6 +9,11 @@ export class KioCapacityDashboard extends Component {
         this.orm = useService("orm");
         this.action = useService("action");
 
+        const today = new Date();
+        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        const formatDate = (date) => date.toISOString().slice(0, 10);
+
         this.state = useState({
             loading: true,
             summary: {
@@ -17,8 +22,8 @@ export class KioCapacityDashboard extends Component {
                 totalCapacityItems: 0,
             },
             capacityItems: [],
-            dateFrom: "",
-            dateTo: "",
+            dateFrom: formatDate(monthStart),
+            dateTo: formatDate(monthEnd),
         });
 
         onWillStart(async () => {

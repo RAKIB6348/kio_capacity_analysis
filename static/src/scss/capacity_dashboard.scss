@@ -1,710 +1,544 @@
-/* =========================================================
-   KIO CAPACITY DASHBOARD - MODERN DESIGN (CENTERED)
-========================================================= */
-
-/* =========================================================
-   HIDE ODOO SEARCH BAR & PAGER
-========================================================= */
-
-.o_action_manager:has(.o_kio_capacity_dashboard) .o_control_panel .o_cp_searchview,
-.o_action_manager:has(.o_kio_capacity_dashboard) .o_control_panel .o_searchview,
-.o_action_manager:has(.o_kio_capacity_dashboard) .o_control_panel .o_search_panel,
-.o_action_manager:has(.o_kio_capacity_dashboard) .o_control_panel .o_pager,
-.o_action_manager:has(.o_kio_capacity_dashboard) .o_control_panel .o_cp_pager,
-.o_action_manager:has(.o_kio_capacity_dashboard) .o_control_panel .o_cp_bottom {
+/* KIO Upstream Capacity Dashboard */
+.o_action_manager:has(.kio_upstream_dashboard) .o_control_panel .o_cp_searchview,
+.o_action_manager:has(.kio_upstream_dashboard) .o_control_panel .o_searchview,
+.o_action_manager:has(.kio_upstream_dashboard) .o_control_panel .o_search_panel,
+.o_action_manager:has(.kio_upstream_dashboard) .o_control_panel .o_pager,
+.o_action_manager:has(.kio_upstream_dashboard) .o_control_panel .o_cp_pager,
+.o_action_manager:has(.kio_upstream_dashboard) .o_control_panel .o_cp_bottom {
     display: none !important;
 }
 
-.o_action_manager:has(.o_kio_capacity_dashboard) .o_control_panel {
-    min-height: 44px !important;
-    padding-bottom: 0 !important;
-}
-
-/* =========================================================
-   MAIN DASHBOARD BACKGROUND - CENTERED FLEX
-========================================================= */
-
-.o_kanban_renderer.o_kio_capacity_dashboard {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: flex-start !important;
-    width: 100% !important;
-    min-height: calc(100vh - 120px);
-    padding: 36px 40px !important;
-    background:
-        radial-gradient(circle at 8% 12%, rgba(59, 130, 246, 0.05), transparent 35%),
-        radial-gradient(circle at 92% 20%, rgba(14, 165, 233, 0.04), transparent 30%),
-        radial-gradient(circle at 50% 85%, rgba(124, 58, 237, 0.03), transparent 40%),
-        linear-gradient(175deg, #f8fafc 0%, #f1f5f9 100%);
-}
-
-/* =========================================================
-   KANBAN RECORD OVERRIDES
-========================================================= */
-
-.o_kio_capacity_dashboard .o_kanban_record {
-    width: 100% !important;
-    max-width: 100% !important;
-    flex: 0 0 100% !important;
-    margin: 0 !important;
+.o_action_manager:has(.kio_upstream_dashboard) .o_control_panel {
+    min-height: 0 !important;
     padding: 0 !important;
-    border: none !important;
-    background: transparent !important;
-    box-shadow: none !important;
+    border: 0 !important;
 }
 
-.o_kio_capacity_dashboard .o_kanban_record > div {
-    width: 100% !important;
+.kio_upstream_dashboard {
+    min-height: calc(100vh - 46px);
+    background: #f6f7fb;
+    color: #172033;
+    font-family: var(--o-font-family, Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
 }
 
-.o_kio_capacity_dashboard .o_kanban_record:hover,
-.o_kio_capacity_dashboard .o_kanban_record:focus {
-    background: transparent !important;
-    box-shadow: none !important;
-}
-
-.o_kio_capacity_dashboard .o_kanban_record::before {
-    display: none !important;
-}
-
-/* =========================================================
-   WRAPPER - CENTERED WITH MAX WIDTH
-========================================================= */
-
-.o_kio_dashboard_wrapper {
-    width: 100%;
-    max-width: 1480px;
-    margin: 0 auto;
-    padding: 0 20px;
-    box-sizing: border-box;
-}
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.o_kio_dashboard_header {
+.kio_upstream_navbar {
+    height: 64px;
+    padding: 0 34px;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 44px;
+    background: #ffffff;
+    border-bottom: 1px solid #eceef5;
+    box-shadow: 0 1px 0 rgba(17, 24, 39, 0.03);
 }
 
-.o_kio_breadcrumb {
+.kio_upstream_brand,
+.kio_upstream_nav_menu,
+.kio_upstream_item_identity,
+.kio_upstream_metric_row,
+.kio_upstream_date_filter {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 18px;
-    color: #7c3aed;
-    font-size: 13px;
-    font-weight: 600;
 }
 
-.o_kio_breadcrumb i {
-    color: #cbd5e1;
-    font-size: 10px;
-}
-
-.o_kio_breadcrumb_current {
-    color: #64748b;
-    font-weight: 500;
-}
-
-.o_kio_dashboard_title {
-    margin: 0 0 8px 0;
-    color: #0f172a;
-    font-size: 34px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    line-height: 1.15;
-}
-
-.o_kio_dashboard_subtitle {
-    margin: 0;
-    color: #64748b;
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 1.5;
-}
-
-.o_kio_header_right {
-    margin-top: 36px;
-}
-
-.o_kio_today_btn {
-    display: inline-flex;
-    align-items: center;
+.kio_upstream_brand {
     gap: 12px;
-    padding: 0 18px 0 20px;
-    height: 44px;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(8px);
-    color: #1e293b;
-    font-size: 13px;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
-    cursor: default;
-    transition: all 0.2s ease;
 }
 
-.o_kio_today_btn:hover {
-    background: #ffffff;
-    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
-}
-
-.o_kio_today_btn i {
-    color: #64748b;
-    font-size: 16px;
-}
-
-.o_kio_time_badge {
-    padding: 3px 12px;
-    border-radius: 16px;
-    background: #eef2ff;
-    color: #4f46e5;
-    font-size: 11px;
-    font-weight: 700;
-}
-
-/* =========================================================
-   METRIC CARDS GRID
-========================================================= */
-
-.o_kio_dashboard_grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    width: 100%;
-    margin-bottom: 24px;
-}
-
-/* =========================================================
-   METRIC CARD
-========================================================= */
-
-.o_kio_metric_card {
-    position: relative;
-    display: block;
-    width: 100%;
-    color: inherit;
-    text-align: left;
-    text-decoration: none;
-    font: inherit;
-    cursor: pointer;
-    appearance: none;
-    padding: 28px 26px 22px 26px;
-    border-radius: 16px;
-    background: #ffffff;
-    border: 1px solid rgba(226, 232, 240, 0.7);
-    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
-    min-height: 210px;
-}
-
-.o_kio_metric_card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
-    border-color: rgba(226, 232, 240, 0.9);
-}
-
-/* Top Accent Line */
-.o_kio_top_line {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-}
-
-/* Glow Effect */
-.o_kio_card_glow {
-    position: absolute;
-    top: -60px;
-    right: -60px;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    opacity: 0.04;
-    background: radial-gradient(circle, currentColor, transparent 70%);
-    pointer-events: none;
-}
-
-/* =========================================================
-   CARD HEADER (Icon + Status)
-========================================================= */
-
-.o_kio_card_header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 22px;
-}
-
-.o_kio_metric_icon {
-    width: 52px;
-    height: 52px;
+.kio_upstream_brand_mark {
+    width: 38px;
+    height: 38px;
     border-radius: 12px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    font-size: 24px;
-    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.10);
-    transition: transform 0.3s ease;
+    font-size: 13px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    box-shadow: 0 10px 24px rgba(124, 58, 237, 0.26);
 }
 
-.o_kio_metric_card:hover .o_kio_metric_icon {
-    transform: scale(1.04);
+.kio_upstream_brand_text {
+    color: #151927;
+    font-size: 17px;
+    font-weight: 800;
 }
 
-/* =========================================================
-   STATUS BADGE
-========================================================= */
-
-.o_kio_status_badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 12px 4px 8px;
-    border-radius: 16px;
-    background: #f1f5f9;
-    font-size: 11px;
-    font-weight: 600;
-    color: #475569;
-}
-
-.o_kio_status_dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.o_kio_status_dot.active {
-    background: #22c55e;
-    box-shadow: 0 0 8px rgba(34, 197, 94, 0.35);
-}
-
-.o_kio_status_dot.stable {
-    background: #3b82f6;
-    box-shadow: 0 0 8px rgba(59, 130, 246, 0.35);
-}
-
-.o_kio_status_dot.warning {
-    background: #eab308;
-    box-shadow: 0 0 8px rgba(234, 179, 8, 0.35);
-}
-
-/* =========================================================
-   CARD TEXT
-========================================================= */
-
-.o_kio_metric_label {
-    margin-bottom: 8px;
-    color: #64748b;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-}
-
-.o_kio_metric_value {
-    display: flex;
-    align-items: baseline;
+.kio_upstream_nav_menu {
     gap: 8px;
 }
 
-.o_kio_number {
-    font-size: 36px;
-    font-weight: 800;
-    color: #0f172a;
-    letter-spacing: -0.5px;
-    line-height: 1.1;
-}
-
-.o_kio_metric_unit {
-    color: #94a3b8;
+.kio_upstream_nav_item {
+    height: 38px;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    color: #667085;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
-/* =========================================================
-   CARD FOOTER
-========================================================= */
+.kio_upstream_nav_item_active {
+    color: #6d28d9;
+    background: #f4edff;
+}
 
-.o_kio_metric_footer {
+.kio_upstream_page {
+    width: calc(100% - 48px);
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 34px 0 44px;
+}
+
+.kio_upstream_header {
+    position: relative;
+    min-height: 92px;
+    margin-bottom: 26px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.kio_upstream_header_center {
+    max-width: 560px;
+    text-align: center;
+    padding-top: 4px;
+}
+
+.kio_upstream_title {
+    margin: 0;
+    color: #111827;
+    font-size: 31px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.kio_upstream_subtitle {
+    margin-top: 8px;
+    color: #7a8294;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.kio_upstream_date_filter {
+    position: absolute;
+    top: 0;
+    right: 0;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid #eceaf4;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 18px 46px rgba(16, 24, 40, 0.08);
+}
+
+.kio_upstream_date_field {
+    min-width: 142px;
+}
+
+.kio_upstream_date_label {
+    display: block;
+    margin: 0 0 6px;
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.kio_upstream_date_input {
+    height: 38px;
+    border: 1px solid #e5e7eb;
+    border-radius: 11px;
+    color: #20283a;
+    font-size: 13px;
+    font-weight: 600;
+    background-color: #fbfcff;
+    box-shadow: none;
+}
+
+.kio_upstream_date_input:focus {
+    border-color: #9b6cf4;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+.kio_upstream_clear_btn {
+    height: 38px;
+    min-width: 78px;
+    align-self: flex-end;
+    border: 0;
+    border-radius: 11px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
+    box-shadow: 0 10px 22px rgba(124, 58, 237, 0.24);
+}
+
+.kio_upstream_clear_btn:disabled {
+    opacity: 0.58;
+    color: #ffffff;
+}
+
+.kio_upstream_loading,
+.kio_upstream_empty {
+    padding: 18px 20px;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid #eceef5;
+    color: #667085;
+    font-weight: 700;
+    box-shadow: 0 12px 34px rgba(16, 24, 40, 0.06);
+}
+
+.kio_upstream_summary_grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    margin-bottom: 26px;
+}
+
+.kio_upstream_summary_card {
+    position: relative;
+    min-height: 166px;
+    padding: 26px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-top: 16px;
-    padding-top: 14px;
-    border-top: 1px solid #f1f5f9;
-    font-size: 12px;
-    font-weight: 600;
+    gap: 20px;
+    overflow: hidden;
+    border-radius: 24px;
+    background: #ffffff;
+    border: 1px solid rgba(230, 232, 240, 0.92);
+    box-shadow: 0 18px 52px rgba(17, 24, 39, 0.08);
 }
 
-.o_kio_trend_up {
-    color: #22c55e;
+.kio_upstream_summary_card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 4px;
+    opacity: 0.9;
 }
 
-.o_kio_trend_up i {
-    margin-right: 4px;
-    font-size: 11px;
+.kio_upstream_summary_card_purple::after {
+    background: linear-gradient(90deg, #7c3aed, #c084fc);
 }
 
-.o_kio_trend_stable {
-    color: #3b82f6;
+.kio_upstream_summary_card_green::after {
+    background: linear-gradient(90deg, #16a34a, #86efac);
 }
 
-.o_kio_trend_stable i {
-    margin-right: 4px;
-    font-size: 11px;
+.kio_upstream_summary_icon {
+    position: relative;
+    z-index: 1;
+    width: 62px;
+    height: 62px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 25px;
+    flex: 0 0 auto;
 }
 
-.o_kio_updated {
-    color: #94a3b8;
-    font-weight: 500;
-    font-size: 11px;
+.kio_upstream_summary_icon_purple {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    box-shadow: 0 16px 30px rgba(124, 58, 237, 0.28);
 }
 
-/* =========================================================
-   CARD COLOR VARIANTS
-========================================================= */
-
-/* Total Capacity - Blue */
-.o_kio_metric_total {
-    color: #2563eb;
-}
-.o_kio_metric_total .o_kio_top_line {
-    background: linear-gradient(90deg, #2563eb, #60a5fa);
-}
-.o_kio_metric_total .o_kio_metric_icon {
-    background: linear-gradient(135deg, #2563eb, #60a5fa);
+.kio_upstream_summary_icon_green {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    box-shadow: 0 16px 30px rgba(22, 163, 74, 0.22);
 }
 
-/* Bandwidth - Teal */
-.o_kio_metric_bandwidth {
-    color: #0891b2;
-}
-.o_kio_metric_bandwidth .o_kio_top_line {
-    background: linear-gradient(90deg, #0891b2, #22d3ee);
-}
-.o_kio_metric_bandwidth .o_kio_metric_icon {
-    background: linear-gradient(135deg, #0891b2, #22d3ee);
+.kio_upstream_summary_content {
+    position: relative;
+    z-index: 1;
 }
 
-/* MAC - Purple */
-.o_kio_metric_mac {
+.kio_upstream_summary_label {
+    margin-bottom: 8px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.kio_upstream_summary_value {
+    font-size: 34px;
+    line-height: 1.1;
+    font-weight: 900;
+}
+
+.kio_upstream_text_purple {
     color: #7c3aed;
 }
-.o_kio_metric_mac .o_kio_top_line {
-    background: linear-gradient(90deg, #7c3aed, #a78bfa);
-}
-.o_kio_metric_mac .o_kio_metric_icon {
-    background: linear-gradient(135deg, #7c3aed, #a78bfa);
-}
 
-/* Free - Green */
-.o_kio_metric_free {
+.kio_upstream_text_green {
     color: #16a34a;
 }
-.o_kio_metric_free .o_kio_top_line {
-    background: linear-gradient(90deg, #16a34a, #4ade80);
-}
-.o_kio_metric_free .o_kio_metric_icon {
-    background: linear-gradient(135deg, #16a34a, #4ade80);
+
+.kio_upstream_chart_bg {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    width: 44%;
+    height: 82px;
+    opacity: 0.2;
+    pointer-events: none;
 }
 
-/* NTTN - Amber */
-.o_kio_metric_nttn {
-    color: #d97706;
-}
-.o_kio_metric_nttn .o_kio_top_line {
-    background: linear-gradient(90deg, #d97706, #fbbf24);
-}
-.o_kio_metric_nttn .o_kio_metric_icon {
-    background: linear-gradient(135deg, #d97706, #fbbf24);
+.kio_upstream_line_chart {
+    background:
+        linear-gradient(135deg, transparent 8%, rgba(124, 58, 237, 0.7) 9%, transparent 11%, transparent 32%, rgba(124, 58, 237, 0.7) 34%, transparent 36%, transparent 56%, rgba(124, 58, 237, 0.7) 58%, transparent 60%),
+        linear-gradient(180deg, rgba(124, 58, 237, 0.14), rgba(124, 58, 237, 0));
+    border-radius: 18px;
 }
 
-/* =========================================================
-   BOTTOM STATS SECTION
-========================================================= */
+.kio_upstream_bar_chart {
+    background-image:
+        linear-gradient(to top, rgba(22, 163, 74, 0.58) 54%, transparent 54%),
+        linear-gradient(to top, rgba(22, 163, 74, 0.45) 74%, transparent 74%),
+        linear-gradient(to top, rgba(22, 163, 74, 0.32) 42%, transparent 42%),
+        linear-gradient(to top, rgba(22, 163, 74, 0.5) 66%, transparent 66%);
+    background-position: 0 100%, 28% 100%, 56% 100%, 84% 100%;
+    background-size: 18% 100%, 18% 100%, 18% 100%, 18% 100%;
+    background-repeat: no-repeat;
+    border-radius: 18px;
+}
 
-.o_kio_bottom_stats {
+.kio_upstream_card_grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 8px;
-    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
 }
 
-.o_kio_stat_card {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    padding: 18px 24px;
-    border-radius: 14px;
+.kio_upstream_item_card {
+    padding: 22px;
+    border-radius: 22px;
     background: #ffffff;
-    border: 1px solid rgba(226, 232, 240, 0.7);
-    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
-    transition: all 0.2s ease;
+    border: 1px solid rgba(230, 232, 240, 0.94);
+    box-shadow: 0 16px 42px rgba(17, 24, 39, 0.07);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
-.o_kio_stat_card:hover {
-    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
-    border-color: rgba(226, 232, 240, 0.9);
+.kio_upstream_item_card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(124, 58, 237, 0.2);
+    box-shadow: 0 22px 54px rgba(17, 24, 39, 0.1);
 }
 
-.o_kio_stat_icon {
-    font-size: 28px;
-    line-height: 1;
-}
-
-.o_kio_stat_content {
-    flex: 1;
+.kio_upstream_item_header {
     display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.kio_upstream_item_identity {
+    min-width: 0;
+    gap: 12px;
+}
+
+.kio_upstream_item_icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 15px;
+    display: inline-flex;
     align-items: center;
-    gap: 14px;
+    justify-content: center;
+    flex: 0 0 auto;
+    color: #7c3aed;
+    background: #f3eefe;
+    font-size: 19px;
 }
 
-.o_kio_stat_label {
-    font-weight: 600;
-    color: #475569;
-    font-size: 13px;
-    min-width: 110px;
+.kio_upstream_item_name {
+    margin: 0;
+    color: #172033;
+    font-size: 17px;
+    line-height: 1.25;
+    font-weight: 800;
+    overflow-wrap: anywhere;
 }
 
-.o_kio_stat_progress {
-    flex: 1;
-    height: 6px;
-    border-radius: 4px;
-    background: #e2e8f0;
-    overflow: hidden;
-}
-
-.o_kio_stat_bar {
-    height: 100%;
-    border-radius: 4px;
-    background: linear-gradient(90deg, #2563eb, #7c3aed);
-    transition: width 1.2s ease;
-}
-
-.o_kio_stat_bar_green {
-    background: linear-gradient(90deg, #16a34a, #22c55e);
-}
-
-.o_kio_stat_bar_purple {
-    background: linear-gradient(90deg, #7c3aed, #a78bfa);
-}
-
-.o_kio_stat_value {
+.kio_upstream_item_hint {
+    margin-top: 3px;
+    color: #98a2b3;
+    font-size: 12px;
     font-weight: 700;
-    color: #0f172a;
-    font-size: 14px;
-    min-width: 44px;
+}
+
+.kio_upstream_status_badge {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.kio_upstream_status_active {
+    color: #047857;
+    background: #dcfce7;
+}
+
+.kio_upstream_status_archived {
+    color: #64748b;
+    background: #eef2f7;
+}
+
+.kio_upstream_metric_rows {
+    border-top: 1px solid #eef0f5;
+    border-bottom: 1px solid #eef0f5;
+}
+
+.kio_upstream_metric_row {
+    min-height: 64px;
+    gap: 12px;
+    padding: 13px 0;
+}
+
+.kio_upstream_metric_row + .kio_upstream_metric_row {
+    border-top: 1px solid #eef0f5;
+}
+
+.kio_upstream_metric_icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    font-size: 15px;
+}
+
+.kio_upstream_metric_icon_purple {
+    color: #7c3aed;
+    background: #f3e8ff;
+}
+
+.kio_upstream_metric_icon_green {
+    color: #16a34a;
+    background: #dcfce7;
+}
+
+.kio_upstream_metric_icon_blue {
+    color: #2563eb;
+    background: #dbeafe;
+}
+
+.kio_upstream_metric_text {
+    color: #737b8c;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.kio_upstream_metric_value {
+    margin-left: auto;
+    color: #172033;
+    font-size: 15px;
+    font-weight: 900;
     text-align: right;
 }
 
-/* =========================================================
-   RESPONSIVE - LAPTOP
-========================================================= */
+.kio_upstream_view_btn {
+    width: 100%;
+    height: 42px;
+    margin-top: 18px;
+    border: 1px solid rgba(124, 58, 237, 0.34);
+    border-radius: 13px;
+    color: #7c3aed;
+    background: #ffffff;
+    font-size: 14px;
+    font-weight: 800;
+}
 
-@media (max-width: 1400px) {
-    .o_kio_dashboard_grid {
-        gap: 16px;
+.kio_upstream_view_btn:hover,
+.kio_upstream_view_btn:focus {
+    color: #ffffff;
+    border-color: #7c3aed;
+    background: #7c3aed;
+    box-shadow: 0 12px 24px rgba(124, 58, 237, 0.2);
+}
+
+@media (max-width: 1199.98px) {
+    .kio_upstream_header {
+        justify-content: flex-start;
+        padding-right: 0;
     }
-    .o_kio_metric_card {
-        padding: 24px 20px 18px 20px;
-        min-height: 190px;
+
+    .kio_upstream_header_center {
+        text-align: left;
     }
-    .o_kio_number {
-        font-size: 30px;
+
+    .kio_upstream_date_filter {
+        position: static;
+        margin-left: auto;
     }
-    .o_kio_metric_icon {
-        width: 46px;
-        height: 46px;
-        font-size: 20px;
-    }
-    .o_kio_dashboard_wrapper {
-        max-width: 1200px;
+
+    .kio_upstream_card_grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
-/* =========================================================
-   RESPONSIVE - TABLET
-========================================================= */
-
-@media (max-width: 1200px) {
-    .o_kio_dashboard_grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .o_kio_bottom_stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .o_kio_dashboard_header {
-        flex-direction: column;
-        margin-bottom: 32px;
-    }
-    .o_kio_header_right {
-        margin-top: 0;
-    }
-    .o_kio_dashboard_wrapper {
-        max-width: 900px;
-        padding: 0 16px;
-    }
-}
-
-/* =========================================================
-   RESPONSIVE - MOBILE
-========================================================= */
-
-@media (max-width: 768px) {
-    .o_kanban_renderer.o_kio_capacity_dashboard {
-        padding: 16px !important;
+@media (max-width: 991.98px) {
+    .kio_upstream_navbar,
+    .kio_upstream_header,
+    .kio_upstream_date_filter {
+        flex-wrap: wrap;
     }
 
-    .o_kio_dashboard_title {
-        font-size: 26px;
-    }
-
-    .o_kio_dashboard_subtitle {
-        font-size: 14px;
-    }
-
-    .o_kio_dashboard_grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
-
-    .o_kio_metric_card {
-        min-height: 170px;
-        padding: 20px 18px 16px 18px;
-    }
-
-    .o_kio_number {
-        font-size: 28px;
-    }
-
-    .o_kio_metric_icon {
-        width: 42px;
-        height: 42px;
-        font-size: 18px;
-    }
-
-    .o_kio_bottom_stats {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-
-    .o_kio_stat_card {
-        padding: 14px 18px;
-    }
-
-    .o_kio_stat_label {
-        min-width: 80px;
-        font-size: 12px;
-    }
-
-    .o_kio_today_btn {
-        width: 100%;
+    .kio_upstream_header {
+        gap: 18px;
         justify-content: center;
     }
 
-    .o_kio_stat_content {
-        flex-wrap: wrap;
-        gap: 10px;
+    .kio_upstream_header_center {
+        width: 100%;
+        text-align: center;
     }
-    
-    .o_kio_dashboard_wrapper {
-        padding: 0 12px;
+
+    .kio_upstream_date_filter {
+        width: 100%;
+        justify-content: flex-end;
+        margin-left: 0;
     }
-}
 
-/* =========================================================
-   ANIMATION - FADE IN
-========================================================= */
-
-.o_kio_metric_card {
-    animation: o_kio_fadeInUp 0.5s ease forwards;
-    opacity: 0;
-}
-
-.o_kio_metric_card:nth-child(1) { animation-delay: 0.05s; }
-.o_kio_metric_card:nth-child(2) { animation-delay: 0.10s; }
-.o_kio_metric_card:nth-child(3) { animation-delay: 0.15s; }
-.o_kio_metric_card:nth-child(4) { animation-delay: 0.20s; }
-
-.o_kio_stat_card {
-    animation: o_kio_fadeInUp 0.5s ease forwards;
-    opacity: 0;
-}
-
-.o_kio_stat_card:nth-child(1) { animation-delay: 0.25s; }
-.o_kio_stat_card:nth-child(2) { animation-delay: 0.30s; }
-.o_kio_stat_card:nth-child(3) { animation-delay: 0.35s; }
-
-@keyframes o_kio_fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(16px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .kio_upstream_summary_grid,
+    .kio_upstream_card_grid {
+        grid-template-columns: 1fr;
     }
 }
 
-/* Progress bar animation on load */
-.o_kio_stat_bar {
-    animation: o_kio_progressGrow 1.5s ease forwards;
-}
+@media (max-width: 767.98px) {
+    .kio_upstream_page {
+        width: calc(100% - 24px);
+        max-width: 1440px;
+        padding-top: 22px;
+    }
 
-@keyframes o_kio_progressGrow {
-    from { width: 0% !important; }
-}
+    .kio_upstream_navbar {
+        height: auto;
+        gap: 12px;
+        padding: 16px;
+        justify-content: center;
+    }
 
-/* =========================================================
-   SCROLLABLE CAPACITY CARDS (Vertical Scrollbar)
-========================================================= */
+    .kio_upstream_date_filter {
+        align-items: stretch;
+    }
 
-.scrollable-capacity-cards {
-    max-height: 68vh;
-    overflow-y: auto;
-    padding-right: 16px;
-    scrollbar-width: thin;
-    scrollbar-color: #7c3aed #f1f5f9;
-    border-radius: 12px;
-}
+    .kio_upstream_date_field,
+    .kio_upstream_clear_btn {
+        width: 100%;
+    }
 
-/* Webkit (Chrome, Edge, Safari) */
-.scrollable-capacity-cards::-webkit-scrollbar {
-    width: 8px;
-}
-
-.scrollable-capacity-cards::-webkit-scrollbar-track {
-    background: #f8fafc;
-    border-radius: 20px;
-    margin: 4px 0;
-}
-
-.scrollable-capacity-cards::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #7c3aed, #a78bfa);
-    border-radius: 20px;
-    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.2);
-}
-
-.scrollable-capacity-cards::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #6d28d9, #8b5cf6);
-}
-
-/* Optional: Scrollable area এর জন্য সুন্দর বর্ডার */
-.scrollable-capacity-cards {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 20px 8px 20px 20px;
+    .kio_upstream_summary_value {
+        font-size: 28px;
+    }
 }

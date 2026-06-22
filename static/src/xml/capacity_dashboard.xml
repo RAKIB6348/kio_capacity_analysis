@@ -1,114 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <t t-name="kio_capacity_analysis.CapacityDashboard">
-        <div class="o_kio_capacity_client_dashboard p-4">
-            <div class="position-relative mb-4 text-center">
-                <button type="button" class="btn btn-primary position-absolute start-0 top-50 translate-middle-y" t-on-click="() => this.openCapacityItemForm()">
-                    Create
-                </button>
-                <div class="d-inline-block">
-                    <h2 class="mb-1">Upstream Capacity Dashboard</h2>
-                    <div class="text-muted">Vendor bill quantity grouped by service product</div>
+        <div class="o_kio_capacity_client_dashboard kio_upstream_dashboard">
+            <div class="kio_upstream_navbar">
+                <div class="kio_upstream_brand">
+                    <span class="kio_upstream_brand_mark">CA</span>
+                    <span class="kio_upstream_brand_text">Capacity Analysis</span>
                 </div>
-                <div class="position-absolute end-0 top-0 d-flex align-items-end gap-2 text-start">
-                    <div>
-                        <label class="form-label mb-1" for="capacity_date_from">Start Date</label>
-                        <input id="capacity_date_from" type="date" class="form-control" t-att-value="state.dateFrom" t-on-change="(ev) => this.onDateRangeChange('dateFrom', ev.target.value)"/>
-                    </div>
-                    <div>
-                        <label class="form-label mb-1" for="capacity_date_to">End Date</label>
-                        <input id="capacity_date_to" type="date" class="form-control" t-att-value="state.dateTo" t-on-change="(ev) => this.onDateRangeChange('dateTo', ev.target.value)"/>
-                    </div>
-                    <button type="button" class="btn btn-outline-secondary" t-att-disabled="!state.dateFrom &amp;&amp; !state.dateTo" t-on-click="() => this.clearDateRange()">
-                        Clear
-                    </button>
+                <div class="kio_upstream_nav_menu">
+                    <span class="kio_upstream_nav_item kio_upstream_nav_item_active">Dashboard</span>
                 </div>
             </div>
 
-            <t t-if="state.loading">
-                <div class="alert alert-info">Loading capacity data...</div>
-            </t>
-
-            <t t-else="">
-                <div class="row g-3 mb-4">
-                    <div class="col-md-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <div class="text-muted mb-1">Total Vendor Bill Quantity</div>
-                                <h3 class="mb-0">
-                                    <t t-esc="formatNumber(state.summary.totalActiveCapacity)"/> Mbps
-                                </h3>
-                            </div>
-                        </div>
+            <div class="kio_upstream_page">
+                <div class="kio_upstream_header">
+                    <div class="kio_upstream_header_center">
+                        <h2 class="kio_upstream_title">Upstream Capacity Dashboard</h2>
+                        <div class="kio_upstream_subtitle">Upstream capacity grouped by capacity item</div>
                     </div>
-                    <!-- <div class="col-md-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <div class="text-muted mb-1">Total Spend</div>
-                                <h3 class="mb-0">
-                                    <t t-esc="formatNumber(state.summary.totalSpend)"/>
-                                </h3>
-                            </div>
+                    <div class="kio_upstream_date_filter" aria-label="Date range filter">
+                        <div class="kio_upstream_date_field">
+                            <label class="kio_upstream_date_label" for="capacity_date_from">Start Date</label>
+                            <input id="capacity_date_from" type="date" class="form-control kio_upstream_date_input" t-att-value="state.dateFrom" t-on-change="(ev) => this.onDateRangeChange('dateFrom', ev.target.value)"/>
                         </div>
-                    </div> -->
-                    <div class="col-md-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <div class="text-muted mb-1">Service Products</div>
-                                <h3 class="mb-0">
-                                    <t t-esc="state.summary.totalCapacityItems"/>
-                                </h3>
-                            </div>
+                        <div class="kio_upstream_date_field">
+                            <label class="kio_upstream_date_label" for="capacity_date_to">End Date</label>
+                            <input id="capacity_date_to" type="date" class="form-control kio_upstream_date_input" t-att-value="state.dateTo" t-on-change="(ev) => this.onDateRangeChange('dateTo', ev.target.value)"/>
                         </div>
+                        <button type="button" class="btn kio_upstream_clear_btn" t-att-disabled="!state.dateFrom &amp;&amp; !state.dateTo" t-on-click="() => this.clearDateRange()">
+                            Clear
+                        </button>
                     </div>
                 </div>
 
-                <div class="row g-3">
-                    <t t-foreach="state.capacityItems" t-as="item" t-key="item.itemId || item.itemName">
-                        <div class="col-md-3">
-                            <div class="card h-100">
-                                <div class="card-body d-flex flex-column">
-                                    <div class="d-flex align-items-start justify-content-between mb-3">
-                                        <h5 class="card-title mb-0" t-esc="item.itemName"/>
-                                        <span t-att-class="item.active ? 'badge text-bg-success' : 'badge text-bg-secondary'">
-                                            <t t-esc="item.active ? 'Active' : 'Archived'"/>
-                                        </span>
-                                    </div>
+                <t t-if="state.loading">
+                    <div class="kio_upstream_loading">Loading capacity data...</div>
+                </t>
 
-                                    <div class="mb-2">
-                                        <div class="text-muted">Sales Quantity</div>
-                                        <div class="fs-4 fw-semibold">
-                                            <t t-esc="formatNumber(item.totalCapacity)"/> Mbps
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-2">
-                                        <div class="text-muted">Vendor Bill Amount</div>
-                                        <div class="fs-5">
-                                            <t t-esc="formatNumber(item.totalPrice)"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <div class="text-muted">Vendor Bill Lines</div>
-                                        <div class="fs-6">
-                                            <t t-esc="item.purchaseCount"/>
-                                        </div>
-                                    </div>
-
-                                    <button type="button" class="btn btn-primary mt-auto" t-on-click="() => this.openCapacityItemPurchases(item)">
-                                        View Vendor Bill Lines
-                                    </button>
+                <t t-else="">
+                    <div class="kio_upstream_summary_grid">
+                        <div class="kio_upstream_summary_card kio_upstream_summary_card_purple">
+                            <div class="kio_upstream_chart_bg kio_upstream_line_chart"></div>
+                            <div class="kio_upstream_summary_icon kio_upstream_summary_icon_purple">
+                                <i class="fa fa-tachometer"/>
+                            </div>
+                            <div class="kio_upstream_summary_content">
+                                <div class="kio_upstream_summary_label">Total Active Capacity</div>
+                                <div class="kio_upstream_summary_value kio_upstream_text_purple">
+                                    <t t-esc="formatNumber(state.summary.totalActiveCapacity)"/> Mbps
                                 </div>
                             </div>
                         </div>
-                    </t>
-                </div>
 
-                <t t-if="!state.capacityItems.length">
-                    <div class="alert alert-warning mt-4">No capacity items found.</div>
+                        <div class="kio_upstream_summary_card kio_upstream_summary_card_green">
+                            <div class="kio_upstream_chart_bg kio_upstream_bar_chart"></div>
+                            <div class="kio_upstream_summary_icon kio_upstream_summary_icon_green">
+                                <i class="fa fa-clone"/>
+                            </div>
+                            <div class="kio_upstream_summary_content">
+                                <div class="kio_upstream_summary_label">Total Capacity Items</div>
+                                <div class="kio_upstream_summary_value kio_upstream_text_green">
+                                    <t t-esc="state.summary.totalCapacityItems"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kio_upstream_card_grid">
+                        <t t-foreach="state.capacityItems" t-as="item" t-key="item.itemId || item.itemName">
+                            <div class="kio_upstream_item_card">
+                                <div class="kio_upstream_item_header">
+                                    <div class="kio_upstream_item_identity">
+                                        <div class="kio_upstream_item_icon">
+                                            <i class="fa fa-server"/>
+                                        </div>
+                                        <div>
+                                            <h5 class="kio_upstream_item_name" t-esc="item.itemName"/>
+                                            <div class="kio_upstream_item_hint">Capacity item</div>
+                                        </div>
+                                    </div>
+                                    <span t-att-class="item.active ? 'kio_upstream_status_badge kio_upstream_status_active' : 'kio_upstream_status_badge kio_upstream_status_archived'">
+                                        <t t-esc="item.active ? 'Active' : 'Archived'"/>
+                                    </span>
+                                </div>
+
+                                <div class="kio_upstream_metric_rows">
+                                    <div class="kio_upstream_metric_row">
+                                        <div class="kio_upstream_metric_icon kio_upstream_metric_icon_purple">
+                                            <i class="fa fa-signal"/>
+                                        </div>
+                                        <div class="kio_upstream_metric_text">Total Capacity</div>
+                                        <div class="kio_upstream_metric_value"><t t-esc="formatNumber(item.totalCapacity)"/> Mbps</div>
+                                    </div>
+                                    <div class="kio_upstream_metric_row">
+                                        <div class="kio_upstream_metric_icon kio_upstream_metric_icon_green">
+                                            <i class="fa fa-money"/>
+                                        </div>
+                                        <div class="kio_upstream_metric_text">Total Price</div>
+                                        <div class="kio_upstream_metric_value"><t t-esc="formatNumber(item.totalPrice)"/></div>
+                                    </div>
+                                    <div class="kio_upstream_metric_row">
+                                        <div class="kio_upstream_metric_icon kio_upstream_metric_icon_blue">
+                                            <i class="fa fa-file-text-o"/>
+                                        </div>
+                                        <div class="kio_upstream_metric_text">Purchases</div>
+                                        <div class="kio_upstream_metric_value"><t t-esc="item.purchaseCount"/></div>
+                                    </div>
+                                </div>
+
+                                <button type="button" class="btn kio_upstream_view_btn" t-on-click="() => this.openCapacityItemPurchases(item)">
+                                    View Purchases <span aria-hidden="true">&#8594;</span>
+                                </button>
+                            </div>
+                        </t>
+                    </div>
+
+                    <t t-if="!state.capacityItems.length">
+                        <div class="kio_upstream_empty">No capacity items found.</div>
+                    </t>
                 </t>
-            </t>
+            </div>
         </div>
     </t>
 </templates>
