@@ -9,10 +9,7 @@ export class KioCapacityDashboard extends Component {
         this.orm = useService("orm");
         this.action = useService("action");
 
-        const today = new Date();
-        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-        const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-        const formatDate = (date) => date.toISOString().slice(0, 10);
+        const currentMonthRange = this.getCurrentMonthRange();
 
         this.state = useState({
             loading: true,
@@ -22,8 +19,8 @@ export class KioCapacityDashboard extends Component {
                 totalCapacityItems: 0,
             },
             capacityItems: [],
-            dateFrom: formatDate(monthStart),
-            dateTo: formatDate(monthEnd),
+            dateFrom: currentMonthRange.dateFrom,
+            dateTo: currentMonthRange.dateTo,
         });
 
         onWillStart(async () => {
@@ -152,6 +149,21 @@ export class KioCapacityDashboard extends Component {
         }
     }
 
+    getCurrentMonthRange() {
+        const today = new Date();
+        const formatDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            return `${year}-${month}-${day}`;
+        };
+
+        return {
+            dateFrom: formatDate(new Date(today.getFullYear(), today.getMonth(), 1)),
+            dateTo: formatDate(new Date(today.getFullYear(), today.getMonth() + 1, 0)),
+        };
+    }
+
     formatNumber(value) {
         return (value || 0).toLocaleString(undefined, {
             maximumFractionDigits: 2,
@@ -164,8 +176,9 @@ export class KioCapacityDashboard extends Component {
     }
 
     async clearDateRange() {
-        this.state.dateFrom = "";
-        this.state.dateTo = "";
+        const currentMonthRange = this.getCurrentMonthRange();
+        this.state.dateFrom = currentMonthRange.dateFrom;
+        this.state.dateTo = currentMonthRange.dateTo;
         await this.loadDashboardData();
     }
 
