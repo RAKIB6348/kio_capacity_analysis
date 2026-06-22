@@ -251,10 +251,10 @@
               parent="menu_kio_capacity_root"
               sequence="90"/> -->
 
-    <menuitem id="menu_kio_capacity_item"
+    <!-- <menuitem id="menu_kio_capacity_item"
               name="Capacity Items"
               parent="menu_kio_capacity_configuration"
               action="action_kio_capacity_item"
-              sequence="10"/>
+              sequence="10"/> -->
 
 </odoo>
