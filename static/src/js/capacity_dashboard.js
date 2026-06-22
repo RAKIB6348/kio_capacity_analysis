@@ -17,6 +17,8 @@ export class KioCapacityDashboard extends Component {
                 totalCapacityItems: 0,
             },
             capacityItems: [],
+            dateFrom: "",
+            dateTo: "",
         });
 
         onWillStart(async () => {
@@ -28,6 +30,14 @@ export class KioCapacityDashboard extends Component {
         this.state.loading = true;
 
         try {
+            const purchaseDomain = [];
+            if (this.state.dateFrom) {
+                purchaseDomain.push(["purchase_date", ">=", this.state.dateFrom]);
+            }
+            if (this.state.dateTo) {
+                purchaseDomain.push(["purchase_date", "<=", this.state.dateTo]);
+            }
+
             const serviceProducts = await this.orm.searchRead(
                 "product.template",
                 [
@@ -38,22 +48,27 @@ export class KioCapacityDashboard extends Component {
                 { context: { active_test: false } }
             );
 
+            const purchases = await this.orm.searchRead(
+                "kio.capacity.upstream.purchase",
+                purchaseDomain,
+                ["id", "active"],
+                { context: { active_test: false } }
+            );
+
+            const purchaseIds = purchases.map((p) => p.id);
+            const purchaseLineDomain = purchaseIds.length
+                ? [["purchase_id", "in", purchaseIds]]
+                : [["id", "=", 0]];
+
             const purchaseLines = await this.orm.searchRead(
                 "kio.capacity.upstream.purchase.line",
-                [],
+                purchaseLineDomain,
                 [
                     "capacity_item_id",
                     "purchased_capacity",
                     "total_price",
                     "purchase_id",
                 ],
-                { context: { active_test: false } }
-            );
-
-            const purchases = await this.orm.searchRead(
-                "kio.capacity.upstream.purchase",
-                [],
-                ["id", "active"],
                 { context: { active_test: false } }
             );
 
@@ -126,6 +141,28 @@ export class KioCapacityDashboard extends Component {
         });
     }
 
+    async onDateRangeChange(field, value) {
+        this.state[field] = value;
+        await this.loadDashboardData();
+    }
+
+    async clearDateRange() {
+        this.state.dateFrom = "";
+        this.state.dateTo = "";
+        await this.loadDashboardData();
+    }
+
+    getPurchaseDomain(item) {
+        const domain = [["line_ids.capacity_item_id.name", "=", item.itemName]];
+        if (this.state.dateFrom) {
+            domain.push(["purchase_date", ">=", this.state.dateFrom]);
+        }
+        if (this.state.dateTo) {
+            domain.push(["purchase_date", "<=", this.state.dateTo]);
+        }
+        return domain;
+    }
+
     openCapacityItemPurchases(item) {
         this.action.doAction({
             type: "ir.actions.act_window",
@@ -135,7 +172,7 @@ export class KioCapacityDashboard extends Component {
                 [false, "tree"],
                 [false, "form"],
             ],
-            domain: [["line_ids.capacity_item_id.name", "=", item.itemName]],
+            domain: this.getPurchaseDomain(item),
             context: { active_test: false },
             target: "current",
         });

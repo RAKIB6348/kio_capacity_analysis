@@ -6,8 +6,23 @@
                 <button type="button" class="btn btn-primary position-absolute start-0 top-50 translate-middle-y" t-on-click="() => this.openCapacityItemForm()">
                     Create
                 </button>
-                <h2 class="mb-1">Upstream Capacity Dashboard</h2>
-                <div class="text-muted">Upstream capacity grouped by capacity item</div>
+                <div class="d-inline-block">
+                    <h2 class="mb-1">Upstream Capacity Dashboard</h2>
+                    <div class="text-muted">Upstream capacity grouped by capacity item</div>
+                </div>
+                <div class="position-absolute end-0 top-0 d-flex align-items-end gap-2 text-start">
+                    <div>
+                        <label class="form-label mb-1" for="capacity_date_from">From Date</label>
+                        <input id="capacity_date_from" type="date" class="form-control" t-att-value="state.dateFrom" t-on-change="(ev) => this.onDateRangeChange('dateFrom', ev.target.value)"/>
+                    </div>
+                    <div>
+                        <label class="form-label mb-1" for="capacity_date_to">To Date</label>
+                        <input id="capacity_date_to" type="date" class="form-control" t-att-value="state.dateTo" t-on-change="(ev) => this.onDateRangeChange('dateTo', ev.target.value)"/>
+                    </div>
+                    <button type="button" class="btn btn-outline-secondary" t-att-disabled="!state.dateFrom &amp;&amp; !state.dateTo" t-on-click="() => this.clearDateRange()">
+                        Clear
+                    </button>
+                </div>
             </div>
 
             <t t-if="state.loading">
