@@ -18,6 +18,10 @@
             <t t-else="">
             <div class="kio_upstream_page">
                 <div class="kio_upstream_header">
+                    <button type="button" class="btn kio_upstream_back_btn kio_upstream_overview_back_btn" t-on-click="() => this.backToOverview()">
+                        <i class="fa fa-arrow-left"/>
+                        Back
+                    </button>
                     <div class="kio_upstream_header_center">
                         <h2 class="kio_upstream_title">Upstream Capacity Dashboard</h2>
                         <div class="kio_upstream_subtitle">Upstream capacity grouped by capacity item</div>

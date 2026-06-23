@@ -468,6 +468,10 @@
         margin-left: auto;
     }
 
+    .kio_upstream_overview_back_btn {
+        position: static;
+    }
+
     .kio_upstream_card_grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -561,6 +565,15 @@
     color: #7c3aed;
     border-color: rgba(124, 58, 237, 0.28);
     background: #faf7ff;
+}
+
+.kio_upstream_overview_back_btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .kio_upstream_compare_date_filter {

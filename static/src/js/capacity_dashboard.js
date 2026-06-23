@@ -340,6 +340,12 @@ export class KioCapacityDashboard extends Component {
         }
     }
 
+    backToOverview() {
+        sessionStorage.removeItem(CURRENT_VIEW_STORAGE_KEY);
+        sessionStorage.removeItem(SELECTED_ITEM_STORAGE_KEY);
+        this.action.doAction("kio_capacity_analysis.action_kio_capacity_dashboard");
+    }
+
     async loadVendorComparisonData() {
         if (!this.state.selectedItem) {
             return;
