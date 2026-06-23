@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+from calendar import monthrange
 
 from odoo import api, fields, models
 
@@ -17,6 +18,7 @@ class KioCapacityDashboard(models.Model):
     total_upstream_capacity = fields.Float(
         string="Total Upstream Capacity",
         compute="_compute_realtime_capacity",
+        digits=(16, 2),
         store=False,
     )
 
@@ -126,14 +128,45 @@ class KioCapacityDashboard(models.Model):
         return final_capacity, base_capacity, upgrade_capacity, downgrade_capacity
 
     def _get_total_upstream_capacity(self):
-        grouped_capacity = self.env["kio.capacity.upstream.purchase.line"].sudo().read_group(
-            [("purchase_id.active", "=", True)],
-            ["purchased_capacity:sum"],
+        date_from, date_to = self._get_default_upstream_capacity_date_range()
+        return self._get_total_active_upstream_capacity(date_from=date_from, date_to=date_to)
+
+    @api.model
+    def _get_default_upstream_capacity_date_range(self):
+        today = fields.Date.context_today(self)
+        date_from = today.replace(day=1)
+        date_to = today.replace(day=monthrange(today.year, today.month)[1])
+        return fields.Date.to_string(date_from), fields.Date.to_string(date_to)
+
+    @api.model
+    def _get_upstream_vendor_bill_line_domain(self, date_from=False, date_to=False):
+        domain = [
+            ("move_id.move_type", "=", "in_invoice"),
+            ("move_id.state", "!=", "cancel"),
+            ("display_type", "=", "product"),
+            ("product_id.product_tmpl_id.detailed_type", "=", "service"),
+            ("product_id.product_tmpl_id.is_upstream_service", "=", True),
+        ]
+        if date_from:
+            domain.append(("move_id.invoice_date", ">=", date_from))
+        if date_to:
+            domain.append(("move_id.invoice_date", "<=", date_to))
+        return domain
+
+    @api.model
+    def _get_total_active_upstream_capacity(self, date_from=False, date_to=False):
+        grouped_capacity = self.env["account.move.line"].sudo().read_group(
+            self._get_upstream_vendor_bill_line_domain(date_from=date_from, date_to=date_to),
+            ["quantity:sum"],
             [],
         )
         if not grouped_capacity:
             return 0.0
-        return grouped_capacity[0].get("purchased_capacity", 0.0) or 0.0
+        return grouped_capacity[0].get("quantity", 0.0) or 0.0
+
+    @api.model
+    def get_total_active_upstream_capacity(self, date_from=False, date_to=False):
+        return self._get_total_active_upstream_capacity(date_from=date_from, date_to=date_to)
 
     @api.depends_context("uid")
     def _compute_realtime_capacity(self):

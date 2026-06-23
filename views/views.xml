@@ -56,7 +56,9 @@
                                     </div>
                                     <div class="kio_capacity_label">Total Upstream Capacity</div>
                                     <div class="kio_capacity_value_row">
-                                        <span class="kio_capacity_value"><field name="total_upstream_capacity"/></span>
+                                        <span class="kio_capacity_value">
+                                            <field name="total_upstream_capacity" widget="float" options="{'digits': [16, 2]}"/>
+                                        </span>
                                         <span class="kio_capacity_unit">Mbps</span>
                                     </div>
                                 </a>

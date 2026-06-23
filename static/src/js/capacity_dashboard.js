@@ -164,7 +164,6 @@ export class KioCapacityDashboard extends Component {
             );
 
             const itemMap = new Map();
-            let totalSalesQuantity = 0;
             let totalInvoiceAmount = 0;
 
             for (const product of serviceProducts) {
@@ -193,12 +192,21 @@ export class KioCapacityDashboard extends Component {
                 item.totalCapacity += quantity;
                 item.totalPrice += amount;
                 item.purchaseCount += 1;
-                totalSalesQuantity += quantity;
                 totalInvoiceAmount += amount;
             }
 
+            const totalActiveCapacity = await this.orm.call(
+                "kio.capacity.dashboard",
+                "get_total_active_upstream_capacity",
+                [],
+                {
+                    date_from: this.state.dateFrom || false,
+                    date_to: this.state.dateTo || false,
+                }
+            );
+
             this.state.summary = {
-                totalActiveCapacity: totalSalesQuantity,
+                totalActiveCapacity,
                 totalSpend: totalInvoiceAmount,
                 totalCapacityItems: serviceProducts.length,
             };
