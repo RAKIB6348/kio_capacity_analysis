@@ -1,0 +1,919 @@
+/* KIO Downstream Capacity Dashboard */
+.o_action_manager:has(.kio_downstream_dashboard) .o_control_panel .o_cp_searchview,
+.o_action_manager:has(.kio_downstream_dashboard) .o_control_panel .o_searchview,
+.o_action_manager:has(.kio_downstream_dashboard) .o_control_panel .o_search_panel,
+.o_action_manager:has(.kio_downstream_dashboard) .o_control_panel .o_pager,
+.o_action_manager:has(.kio_downstream_dashboard) .o_control_panel .o_cp_pager,
+.o_action_manager:has(.kio_downstream_dashboard) .o_control_panel .o_cp_bottom {
+    display: none !important;
+}
+
+.o_action_manager:has(.kio_downstream_dashboard) .o_control_panel {
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+.kio_downstream_dashboard {
+    min-height: calc(100vh - 46px);
+    background: #f6f7fb;
+    color: #172033;
+    font-family: var(--o-font-family, Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+}
+
+.kio_downstream_navbar {
+    height: 64px;
+    padding: 0 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border-bottom: 1px solid #eceef5;
+    box-shadow: 0 1px 0 rgba(17, 24, 39, 0.03);
+}
+
+.kio_downstream_brand,
+.kio_downstream_nav_menu,
+.kio_downstream_item_identity,
+.kio_downstream_metric_row,
+.kio_downstream_date_filter {
+    display: flex;
+    align-items: center;
+}
+
+.kio_downstream_brand {
+    gap: 12px;
+}
+
+.kio_downstream_brand_mark {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    box-shadow: 0 10px 24px rgba(124, 58, 237, 0.26);
+}
+
+.kio_downstream_brand_text {
+    color: #151927;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.kio_downstream_nav_menu {
+    gap: 8px;
+}
+
+.kio_downstream_nav_item {
+    height: 38px;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    color: #667085;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.kio_downstream_nav_item_active {
+    color: #6d28d9;
+    background: #f4edff;
+}
+
+.kio_downstream_page {
+    width: calc(100% - 48px);
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 34px 0 44px;
+}
+
+.kio_downstream_header {
+    position: relative;
+    min-height: 92px;
+    margin-bottom: 26px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.kio_downstream_header_center {
+    max-width: 560px;
+    text-align: center;
+    padding-top: 4px;
+}
+
+.kio_downstream_title {
+    margin: 0;
+    color: #111827;
+    font-size: 31px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.kio_downstream_subtitle {
+    margin-top: 8px;
+    color: #7a8294;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.kio_downstream_date_filter {
+    position: absolute;
+    top: 0;
+    right: 0;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid #eceaf4;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 18px 46px rgba(16, 24, 40, 0.08);
+}
+
+.kio_downstream_date_field {
+    min-width: 142px;
+}
+
+.kio_downstream_date_label {
+    display: block;
+    margin: 0 0 6px;
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.kio_downstream_date_input {
+    height: 38px;
+    border: 1px solid #e5e7eb;
+    border-radius: 11px;
+    color: #20283a;
+    font-size: 13px;
+    font-weight: 600;
+    background-color: #fbfcff;
+    box-shadow: none;
+}
+
+.kio_downstream_date_input:focus {
+    border-color: #9b6cf4;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+.kio_downstream_clear_btn {
+    height: 38px;
+    min-width: 78px;
+    align-self: flex-end;
+    border: 0;
+    border-radius: 11px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
+    box-shadow: 0 10px 22px rgba(124, 58, 237, 0.24);
+}
+
+.kio_downstream_clear_btn:disabled {
+    opacity: 0.58;
+    color: #ffffff;
+}
+
+.kio_downstream_loading,
+.kio_downstream_empty {
+    padding: 18px 20px;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid #eceef5;
+    color: #667085;
+    font-weight: 700;
+    box-shadow: 0 12px 34px rgba(16, 24, 40, 0.06);
+}
+
+.kio_downstream_summary_grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    margin-bottom: 26px;
+}
+
+.kio_downstream_summary_card {
+    position: relative;
+    min-height: 166px;
+    padding: 26px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    overflow: hidden;
+    border-radius: 24px;
+    background: #ffffff;
+    border: 1px solid rgba(230, 232, 240, 0.92);
+    box-shadow: 0 18px 52px rgba(17, 24, 39, 0.08);
+}
+
+.kio_downstream_summary_card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 4px;
+    opacity: 0.9;
+}
+
+.kio_downstream_summary_card_purple::after {
+    background: linear-gradient(90deg, #7c3aed, #c084fc);
+}
+
+.kio_downstream_summary_card_green::after {
+    background: linear-gradient(90deg, #16a34a, #86efac);
+}
+
+.kio_downstream_summary_card_blue::after {
+    background: linear-gradient(90deg, #2563eb, #93c5fd);
+}
+
+.kio_downstream_summary_icon {
+    position: relative;
+    z-index: 1;
+    width: 62px;
+    height: 62px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 25px;
+    flex: 0 0 auto;
+}
+
+.kio_downstream_summary_icon_purple {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    box-shadow: 0 16px 30px rgba(124, 58, 237, 0.28);
+}
+
+.kio_downstream_summary_icon_green {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    box-shadow: 0 16px 30px rgba(22, 163, 74, 0.22);
+}
+
+.kio_downstream_summary_icon_blue {
+    background: linear-gradient(135deg, #2563eb, #60a5fa);
+    box-shadow: 0 16px 30px rgba(37, 99, 235, 0.22);
+}
+
+.kio_downstream_summary_content {
+    position: relative;
+    z-index: 1;
+}
+
+.kio_downstream_summary_label {
+    margin-bottom: 8px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.kio_downstream_summary_value {
+    font-size: 34px;
+    line-height: 1.1;
+    font-weight: 900;
+}
+
+.kio_downstream_text_purple {
+    color: #7c3aed;
+}
+
+.kio_downstream_text_green {
+    color: #16a34a;
+}
+
+.kio_downstream_text_blue {
+    color: #2563eb;
+}
+
+.kio_downstream_chart_bg {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    width: 44%;
+    height: 82px;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+.kio_downstream_line_chart {
+    background:
+        linear-gradient(135deg, transparent 8%, rgba(124, 58, 237, 0.7) 9%, transparent 11%, transparent 32%, rgba(124, 58, 237, 0.7) 34%, transparent 36%, transparent 56%, rgba(124, 58, 237, 0.7) 58%, transparent 60%),
+        linear-gradient(180deg, rgba(124, 58, 237, 0.14), rgba(124, 58, 237, 0));
+    border-radius: 18px;
+}
+
+.kio_downstream_bar_chart {
+    background-image:
+        linear-gradient(to top, rgba(22, 163, 74, 0.58) 54%, transparent 54%),
+        linear-gradient(to top, rgba(22, 163, 74, 0.45) 74%, transparent 74%),
+        linear-gradient(to top, rgba(22, 163, 74, 0.32) 42%, transparent 42%),
+        linear-gradient(to top, rgba(22, 163, 74, 0.5) 66%, transparent 66%);
+    background-position: 0 100%, 28% 100%, 56% 100%, 84% 100%;
+    background-size: 18% 100%, 18% 100%, 18% 100%, 18% 100%;
+    background-repeat: no-repeat;
+    border-radius: 18px;
+}
+
+.kio_downstream_card_grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.kio_downstream_item_card {
+    padding: 22px;
+    border-radius: 22px;
+    background: #ffffff;
+    border: 1px solid rgba(230, 232, 240, 0.94);
+    box-shadow: 0 16px 42px rgba(17, 24, 39, 0.07);
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.kio_downstream_item_card:hover,
+.kio_downstream_item_card:focus {
+    transform: translateY(-2px);
+    border-color: rgba(124, 58, 237, 0.2);
+    box-shadow: 0 22px 54px rgba(17, 24, 39, 0.1);
+    outline: none;
+}
+
+.kio_downstream_item_card:focus-visible {
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18), 0 22px 54px rgba(17, 24, 39, 0.1);
+}
+
+.kio_downstream_item_header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.kio_downstream_item_identity {
+    min-width: 0;
+    gap: 12px;
+}
+
+.kio_downstream_item_icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    color: #7c3aed;
+    background: #f3eefe;
+    font-size: 19px;
+}
+
+.kio_downstream_item_name {
+    margin: 0;
+    color: #172033;
+    font-size: 17px;
+    line-height: 1.25;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.kio_downstream_item_hint {
+    margin-top: 3px;
+    color: #98a2b3;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.kio_downstream_status_badge {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.kio_downstream_status_active {
+    color: #047857;
+    background: #dcfce7;
+}
+
+.kio_downstream_status_archived {
+    color: #64748b;
+    background: #eef2f7;
+}
+
+.kio_downstream_metric_rows {
+    border-top: 1px solid #eef0f5;
+    border-bottom: 1px solid #eef0f5;
+}
+
+.kio_downstream_metric_row {
+    min-height: 64px;
+    gap: 12px;
+    padding: 13px 0;
+}
+
+.kio_downstream_metric_row + .kio_downstream_metric_row {
+    border-top: 1px solid #eef0f5;
+}
+
+.kio_downstream_metric_icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    font-size: 15px;
+}
+
+.kio_downstream_metric_icon_purple {
+    color: #7c3aed;
+    background: #f3e8ff;
+}
+
+.kio_downstream_metric_icon_green {
+    color: #16a34a;
+    background: #dcfce7;
+}
+
+.kio_downstream_metric_icon_blue {
+    color: #2563eb;
+    background: #dbeafe;
+}
+
+.kio_downstream_metric_icon_orange {
+    color: #ea580c;
+    background: #ffedd5;
+}
+
+.kio_downstream_metric_text {
+    color: #737b8c;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.kio_downstream_metric_value {
+    margin-left: auto;
+    color: #172033;
+    font-size: 15px;
+    font-weight: 900;
+    text-align: right;
+}
+
+@media (max-width: 1199.98px) {
+    .kio_downstream_header {
+        justify-content: flex-start;
+        padding-right: 0;
+    }
+
+    .kio_downstream_header_center {
+        text-align: left;
+    }
+
+    .kio_downstream_date_filter {
+        position: static;
+        margin-left: auto;
+    }
+
+    .kio_downstream_overview_back_btn {
+        position: static;
+    }
+
+    .kio_downstream_card_grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 991.98px) {
+    .kio_downstream_navbar,
+    .kio_downstream_header,
+    .kio_downstream_date_filter {
+        flex-wrap: wrap;
+    }
+
+    .kio_downstream_header {
+        gap: 18px;
+        justify-content: center;
+    }
+
+    .kio_downstream_header_center {
+        width: 100%;
+        text-align: center;
+    }
+
+    .kio_downstream_date_filter {
+        width: 100%;
+        justify-content: flex-end;
+        margin-left: 0;
+    }
+
+    .kio_downstream_summary_grid,
+    .kio_downstream_card_grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .kio_downstream_page {
+        width: calc(100% - 24px);
+        max-width: 1440px;
+        padding-top: 22px;
+    }
+
+    .kio_downstream_navbar {
+        height: auto;
+        gap: 12px;
+        padding: 16px;
+        justify-content: center;
+    }
+
+    .kio_downstream_date_filter {
+        align-items: stretch;
+    }
+
+    .kio_downstream_date_field,
+    .kio_downstream_clear_btn {
+        width: 100%;
+    }
+
+    .kio_downstream_summary_value {
+        font-size: 28px;
+    }
+}
+
+
+/* Vendor comparison page */
+.kio_downstream_compare_page {
+    padding-top: 28px;
+}
+
+.kio_downstream_compare_topbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 22px;
+}
+
+.kio_downstream_back_btn {
+    height: 42px;
+    padding: 0 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 13px;
+    color: #4b5563;
+    background: #ffffff;
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+}
+
+.kio_downstream_back_btn:hover,
+.kio_downstream_back_btn:focus {
+    color: #7c3aed;
+    border-color: rgba(124, 58, 237, 0.28);
+    background: #faf7ff;
+}
+
+.kio_downstream_overview_back_btn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.kio_downstream_compare_date_filter {
+    position: static;
+    margin-left: auto;
+}
+
+.kio_downstream_compare_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 24px;
+    padding: 26px;
+    border-radius: 24px;
+    background:
+        linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(37, 99, 235, 0.05)),
+        #ffffff;
+    border: 1px solid rgba(230, 232, 240, 0.92);
+    box-shadow: 0 18px 52px rgba(17, 24, 39, 0.08);
+}
+
+.kio_downstream_compare_identity {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+}
+
+.kio_downstream_compare_icon {
+    width: 62px;
+    height: 62px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    color: #ffffff;
+    font-size: 25px;
+    background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+    box-shadow: 0 18px 34px rgba(79, 70, 229, 0.25);
+}
+
+.kio_downstream_compare_eyebrow {
+    margin-bottom: 4px;
+    color: #7c3aed;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.kio_downstream_compare_title {
+    margin: 0;
+    color: #111827;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 900;
+    overflow-wrap: anywhere;
+}
+
+.kio_downstream_compare_subtitle {
+    margin-top: 6px;
+    color: #6b7280;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.kio_downstream_compare_kpi_grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.kio_downstream_compare_kpi {
+    min-height: 126px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-radius: 22px;
+    background: #ffffff;
+    border: 1px solid rgba(230, 232, 240, 0.94);
+    box-shadow: 0 14px 38px rgba(17, 24, 39, 0.07);
+}
+
+.kio_downstream_compare_kpi_icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    font-size: 18px;
+}
+
+.kio_downstream_compare_kpi_purple .kio_downstream_compare_kpi_icon {
+    color: #7c3aed;
+    background: #f3e8ff;
+}
+
+.kio_downstream_compare_kpi_blue .kio_downstream_compare_kpi_icon {
+    color: #2563eb;
+    background: #dbeafe;
+}
+
+.kio_downstream_compare_kpi_green .kio_downstream_compare_kpi_icon {
+    color: #16a34a;
+    background: #dcfce7;
+}
+
+.kio_downstream_compare_kpi_sky .kio_downstream_compare_kpi_icon {
+    color: #0284c7;
+    background: #e0f2fe;
+}
+
+.kio_downstream_compare_kpi_orange .kio_downstream_compare_kpi_icon {
+    color: #ea580c;
+    background: #ffedd5;
+}
+
+.kio_downstream_compare_kpi_label {
+    margin-bottom: 7px;
+    color: #737b8c;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.kio_downstream_compare_kpi_value {
+    color: #111827;
+    font-size: 22px;
+    line-height: 1.2;
+    font-weight: 900;
+}
+
+.kio_downstream_compare_section_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.kio_downstream_compare_section_head h3 {
+    margin: 0;
+    color: #111827;
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.kio_downstream_compare_section_head span {
+    padding: 7px 12px;
+    border-radius: 999px;
+    color: #2563eb;
+    background: #dbeafe;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.kio_downstream_compare_table_card {
+    overflow: hidden;
+    border-radius: 24px;
+    background: #ffffff;
+    border: 1px solid rgba(230, 232, 240, 0.94);
+    box-shadow: 0 18px 52px rgba(17, 24, 39, 0.08);
+}
+
+.kio_downstream_compare_table {
+    color: #172033;
+    font-size: 14px;
+}
+
+.kio_downstream_compare_table thead th {
+    padding: 16px 18px;
+    border-bottom: 1px solid #eef0f5;
+    color: #6b7280;
+    background: #fbfcff;
+    font-size: 12px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.kio_downstream_compare_table tbody td,
+.kio_downstream_compare_table tfoot td {
+    padding: 16px 18px;
+    border-top: 1px solid #eef0f5;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.kio_downstream_compare_table tbody tr:hover {
+    background: #fbfaff;
+}
+
+.kio_downstream_compare_table tfoot td {
+    color: #111827;
+    background: #f8fafc;
+    font-weight: 900;
+}
+
+.kio_downstream_vendor_cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #111827;
+    font-weight: 900;
+}
+
+.kio_downstream_vendor_avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    background: linear-gradient(135deg, #7c3aed, #2563eb);
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.kio_downstream_table_action {
+    min-height: 34px;
+    padding: 6px 12px;
+    border: 1px solid rgba(124, 58, 237, 0.32);
+    border-radius: 11px;
+    color: #7c3aed;
+    background: #ffffff;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.kio_downstream_table_action:hover,
+.kio_downstream_table_action:focus {
+    color: #ffffff;
+    border-color: #7c3aed;
+    background: #7c3aed;
+}
+
+.kio_downstream_compare_empty {
+    padding: 30px !important;
+    color: #6b7280;
+    text-align: center;
+    font-weight: 800;
+}
+
+.kio_downstream_compare_info {
+    margin-top: 18px;
+    padding: 15px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #bfdbfe;
+    border-radius: 16px;
+    color: #1d4ed8;
+    background: #eff6ff;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+@media (max-width: 1199.98px) {
+    .kio_downstream_compare_kpi_grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 991.98px) {
+    .kio_downstream_compare_topbar,
+    .kio_downstream_compare_header {
+        flex-wrap: wrap;
+    }
+
+    .kio_downstream_compare_date_filter {
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .kio_downstream_compare_kpi_grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kio_downstream_compare_header,
+    .kio_downstream_compare_topbar {
+        align-items: stretch;
+    }
+
+    .kio_downstream_back_btn {
+        width: 100%;
+    }
+
+    .kio_downstream_compare_date_filter {
+        justify-content: stretch;
+    }
+}
+
+/* Vertical scroll for full downstream capacity dashboard page */
+.o_kio_downstream_capacity_dashboard.kio_downstream_dashboard {
+    height: calc(100vh - 46px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #100a1a #eef2f7;
+}
+
+.o_kio_downstream_capacity_dashboard.kio_downstream_dashboard::-webkit-scrollbar {
+    width: 8px;
+}
+
+.o_kio_downstream_capacity_dashboard.kio_downstream_dashboard::-webkit-scrollbar-track {
+    background: #eef2f7;
+    border-radius: 999px;
+}
+
+.o_kio_downstream_capacity_dashboard.kio_downstream_dashboard::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #7c3aed, #a855f7);
+    border-radius: 999px;
+}
+
+.o_kio_downstream_capacity_dashboard.kio_downstream_dashboard::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #6d28d9, #9333ea);
+}

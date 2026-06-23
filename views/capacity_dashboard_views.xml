@@ -5,6 +5,11 @@
         <field name="tag">kio_capacity_analysis.capacity_dashboard</field>
     </record>
 
+    <record id="action_kio_downstream_capacity_dashboard" model="ir.actions.client">
+        <field name="name">Downstream Capacity Dashboard</field>
+        <field name="tag">kio_capacity_analysis.downstream_capacity_dashboard</field>
+    </record>
+
     <!-- <menuitem id="menu_kio_capacity_client_dashboard"
               name="Provider Dashboard"
               parent="menu_kio_capacity_root"

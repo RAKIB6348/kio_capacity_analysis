@@ -168,6 +168,180 @@ class KioCapacityDashboard(models.Model):
     def get_total_active_upstream_capacity(self, date_from=False, date_to=False):
         return self._get_total_active_upstream_capacity(date_from=date_from, date_to=date_to)
 
+    def _get_first_existing_field(self, model, field_names):
+        for field_name in field_names:
+            if field_name in model._fields:
+                return field_name
+        return False
+
+    def _get_client_amount_from_fields(self, client, field_names):
+        for field_name in field_names:
+            if field_name in client._fields:
+                return getattr(client, field_name) or 0.0
+        return 0.0
+
+    def _get_client_monthly_revenue(self, client):
+        revenue = self._get_client_amount_from_fields(client, [
+            "offer_total_price",
+            "monthly_bill",
+            "monthly_fee",
+            "monthly_amount",
+            "recurring_price",
+            "package_price",
+            "bill_amount",
+        ])
+        if revenue:
+            return revenue
+
+        if "offer_capacity_type_ids" not in client._fields:
+            return 0.0
+
+        offer_lines = client.offer_capacity_type_ids
+        for field_name in ("offer_total_price", "total_price", "offer_price", "price"):
+            if offer_lines and field_name in offer_lines._fields:
+                return sum(offer_lines.mapped(field_name))
+        return 0.0
+
+    def _get_client_current_usage(self, client):
+        return self._get_client_amount_from_fields(client, [
+            "current_usage",
+            "used_capacity",
+            "usage_capacity",
+            "consumed_capacity",
+        ])
+
+    def _get_client_package_info(self, client):
+        package_field = self._get_first_existing_field(client, [
+            "package_id",
+            "internet_package_id",
+            "customer_package_id",
+            "service_package_id",
+            "package_product_id",
+            "product_id",
+            "plan_id",
+            "offer_id",
+        ])
+        if package_field:
+            package = getattr(client, package_field)
+            if package:
+                return {
+                    "id": "%s_%s" % (package_field, package.id),
+                    "name": package.display_name,
+                    "active": package.active if "active" in package._fields else True,
+                }
+
+        if "offer_capacity_type_ids" in client._fields and client.offer_capacity_type_ids:
+            names = [line.display_name for line in client.offer_capacity_type_ids if line.display_name]
+            package_name = ", ".join(names) if names else "Customer Package"
+            return {
+                "id": "offer_capacity_%s" % package_name,
+                "name": package_name,
+                "active": True,
+            }
+
+        return {
+            "id": "unassigned",
+            "name": "Unassigned Package",
+            "active": True,
+        }
+
+    def _get_downstream_client_domain(self, date_from=False, date_to=False):
+        Client = self.env["isp.client"].sudo()
+        domain = []
+        if "active" in Client._fields:
+            domain.append(("active", "=", True))
+        if "client_type" in Client._fields:
+            domain.append(("client_type", "=", "bandwith"))
+        if "pipeline_state" in Client._fields:
+            domain.append(("pipeline_state", "=", "noc_confirm"))
+
+        date_field = self._get_first_existing_field(Client, [
+            "confirmed_date",
+            "noc_confirmed_date",
+            "noc_confirm_date",
+            "activation_date",
+            "create_date",
+        ])
+        if date_field and date_from:
+            domain.append((date_field, ">=", date_from))
+        if date_field and date_to:
+            domain.append((date_field, "<=", date_to))
+        return domain
+
+    @api.model
+    def get_downstream_capacity_dashboard_data(self, date_from=False, date_to=False):
+        clients = self.env["isp.client"].sudo().search(
+            self._get_downstream_client_domain(date_from=date_from, date_to=date_to),
+            order="display_name asc, id asc",
+        )
+
+        packages = {}
+        total_capacity = 0.0
+        total_revenue = 0.0
+
+        for client in clients:
+            allocated_capacity, _base_capacity, _upgrade_capacity, _downgrade_capacity = (
+                self._get_client_realtime_capacity(client)
+            )
+            current_usage = self._get_client_current_usage(client)
+            monthly_revenue = self._get_client_monthly_revenue(client)
+            remaining_capacity = max(allocated_capacity - current_usage, 0.0)
+            package = self._get_client_package_info(client)
+
+            if package["id"] not in packages:
+                packages[package["id"]] = {
+                    "packageId": package["id"],
+                    "packageName": package["name"],
+                    "active": package["active"],
+                    "customerCount": 0,
+                    "allocatedCapacity": 0.0,
+                    "monthlyRevenue": 0.0,
+                    "clientIds": [],
+                    "customers": [],
+                }
+
+            package_row = packages[package["id"]]
+            package_row["customerCount"] += 1
+            package_row["allocatedCapacity"] += allocated_capacity
+            package_row["monthlyRevenue"] += monthly_revenue
+            package_row["clientIds"].append(client.id)
+            package_row["customers"].append({
+                "id": client.id,
+                "name": client.display_name,
+                "package": package["name"],
+                "allocatedCapacity": allocated_capacity,
+                "currentUsage": current_usage,
+                "remainingCapacity": remaining_capacity,
+                "monthlyBill": monthly_revenue,
+                "status": "Active"
+                if ("active" not in client._fields or client.active)
+                else "Suspended",
+            })
+
+            total_capacity += allocated_capacity
+            total_revenue += monthly_revenue
+
+        package_rows = []
+        for package in packages.values():
+            package["averageCapacity"] = (
+                package["allocatedCapacity"] / package["customerCount"]
+                if package["customerCount"]
+                else 0.0
+            )
+            package_rows.append(package)
+
+        package_rows.sort(key=lambda row: row["packageName"].lower())
+
+        return {
+            "summary": {
+                "totalActiveCustomers": len(clients),
+                "totalAllocatedCapacity": total_capacity,
+                "totalPackages": len(package_rows),
+                "totalMonthlyRevenue": total_revenue,
+            },
+            "packages": package_rows,
+        }
+
     @api.depends_context("uid")
     def _compute_realtime_capacity(self):
         Client = self.env["isp.client"].sudo()
@@ -291,3 +465,12 @@ class KioCapacityDashboard(models.Model):
         return self.env["ir.actions.actions"]._for_xml_id(
             "kio_capacity_analysis.action_kio_capacity_client_dashboard"
         )
+
+    def action_open_downstream_capacity_dashboard(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.client",
+            "name": "Downstream Capacity Dashboard",
+            "tag": "kio_capacity_analysis.downstream_capacity_dashboard",
+            "target": "current",
+        }

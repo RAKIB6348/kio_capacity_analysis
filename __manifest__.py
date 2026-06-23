@@ -22,10 +22,13 @@
         'web.assets_backend': [
             'kio_capacity_analysis/static/src/js/vendor_bill_comparison.js',
             'kio_capacity_analysis/static/src/js/capacity_dashboard.js',
+            'kio_capacity_analysis/static/src/js/downstream_capacity_dashboard.js',
             'kio_capacity_analysis/static/src/xml/capacity_dashboard.xml',
             'kio_capacity_analysis/static/src/xml/vendor_comparison.xml',
+            'kio_capacity_analysis/static/src/xml/downstream_capacity_dashboard.xml',
             'kio_capacity_analysis/static/src/scss/capacity_overview_dashboard.scss',
             'kio_capacity_analysis/static/src/scss/capacity_dashboard.scss',
+            'kio_capacity_analysis/static/src/scss/downstream_capacity_dashboard.scss',
             'kio_capacity_analysis/static/src/scss/vendor_bill_comparison.scss',
         ],
     },

@@ -63,7 +63,8 @@
                                     </div>
                                 </a>
 
-                                <div class="kio_capacity_card kio_capacity_card_blue">
+                                <a type="object" name="action_open_downstream_capacity_dashboard"
+                                   class="kio_capacity_card kio_capacity_card_blue o_kanban_action">
                                     <div class="kio_capacity_card_topline"></div>
                                     <div class="kio_capacity_card_header">
                                         <div class="kio_capacity_icon kio_capacity_icon_blue">
@@ -79,7 +80,7 @@
                                         <span class="kio_capacity_value"><field name="total_capacity"/></span>
                                         <span class="kio_capacity_unit">Mbps</span>
                                     </div>
-                                </div>
+                                </a>
 
                                 <div class="kio_capacity_card kio_capacity_card_green">
                                     <div class="kio_capacity_card_topline"></div>

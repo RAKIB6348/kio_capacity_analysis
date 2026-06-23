@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="kio_capacity_analysis.DownstreamCapacityDashboard">
+        <div class="o_kio_downstream_capacity_dashboard kio_downstream_dashboard">
+            <div class="kio_downstream_navbar">
+                <div class="kio_downstream_brand">
+                    <span class="kio_downstream_brand_mark">DC</span>
+                    <span class="kio_downstream_brand_text">Capacity Analysis</span>
+                </div>
+                <div class="kio_downstream_nav_menu">
+                    <span class="kio_downstream_nav_item kio_downstream_nav_item_active">Dashboard</span>
+                </div>
+            </div>
+
+            <t t-if="state.selectedPackage">
+                <t t-call="kio_capacity_analysis.CustomerCapacityAnalysisPage"/>
+            </t>
+            <t t-else="">
+                <div class="kio_downstream_page">
+                    <div class="kio_downstream_header">
+                        <button type="button" class="btn kio_downstream_back_btn kio_downstream_overview_back_btn" t-on-click="() => this.backToOverview()">
+                            <i class="fa fa-arrow-left"/>
+                            Back
+                        </button>
+                        <div class="kio_downstream_header_center">
+                            <h2 class="kio_downstream_title">Downstream Capacity Dashboard</h2>
+                            <div class="kio_downstream_subtitle">Customer downstream capacity grouped by package</div>
+                        </div>
+                        <div class="kio_downstream_date_filter" aria-label="Date range filter">
+                            <div class="kio_downstream_date_field">
+                                <label class="kio_downstream_date_label" for="downstream_date_from">Start Date</label>
+                                <input id="downstream_date_from" type="date" class="form-control kio_downstream_date_input" t-att-value="state.dateFrom" t-on-change="(ev) => this.onDateRangeChange('dateFrom', ev.target.value)"/>
+                            </div>
+                            <div class="kio_downstream_date_field">
+                                <label class="kio_downstream_date_label" for="downstream_date_to">End Date</label>
+                                <input id="downstream_date_to" type="date" class="form-control kio_downstream_date_input" t-att-value="state.dateTo" t-on-change="(ev) => this.onDateRangeChange('dateTo', ev.target.value)"/>
+                            </div>
+                            <button type="button" class="btn kio_downstream_clear_btn" t-att-disabled="!state.dateFrom &amp;&amp; !state.dateTo" t-on-click="() => this.clearDateRange()">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <t t-if="state.loading">
+                        <div class="kio_downstream_loading">Loading customer capacity data...</div>
+                    </t>
+
+                    <t t-else="">
+                        <div class="kio_downstream_summary_grid">
+                            <div class="kio_downstream_summary_card kio_downstream_summary_card_green">
+                                <div class="kio_downstream_chart_bg kio_downstream_bar_chart"></div>
+                                <div class="kio_downstream_summary_icon kio_downstream_summary_icon_green">
+                                    <i class="fa fa-users"/>
+                                </div>
+                                <div class="kio_downstream_summary_content">
+                                    <div class="kio_downstream_summary_label">Total Active Customers</div>
+                                    <div class="kio_downstream_summary_value kio_downstream_text_green">
+                                        <t t-esc="state.summary.totalActiveCustomers"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="kio_downstream_summary_card kio_downstream_summary_card_purple">
+                                <div class="kio_downstream_chart_bg kio_downstream_line_chart"></div>
+                                <div class="kio_downstream_summary_icon kio_downstream_summary_icon_purple">
+                                    <i class="fa fa-signal"/>
+                                </div>
+                                <div class="kio_downstream_summary_content">
+                                    <div class="kio_downstream_summary_label">Total Allocated Capacity</div>
+                                    <div class="kio_downstream_summary_value kio_downstream_text_purple">
+                                        <t t-esc="formatNumber(state.summary.totalAllocatedCapacity)"/> Mbps
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="kio_downstream_summary_card kio_downstream_summary_card_blue">
+                                <div class="kio_downstream_chart_bg kio_downstream_line_chart"></div>
+                                <div class="kio_downstream_summary_icon kio_downstream_summary_icon_blue">
+                                    <i class="fa fa-clone"/>
+                                </div>
+                                <div class="kio_downstream_summary_content">
+                                    <div class="kio_downstream_summary_label">Total Packages</div>
+                                    <div class="kio_downstream_summary_value kio_downstream_text_blue">
+                                        <t t-esc="state.summary.totalPackages"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="kio_downstream_card_grid">
+                            <t t-foreach="state.packages" t-as="packageRow" t-key="packageRow.packageId">
+                                <div class="kio_downstream_item_card" role="button" tabindex="0" t-on-click="() => this.openPackage(packageRow)">
+                                    <div class="kio_downstream_item_header">
+                                        <div class="kio_downstream_item_identity">
+                                            <div class="kio_downstream_item_icon">
+                                                <i class="fa fa-wifi"/>
+                                            </div>
+                                            <div>
+                                                <h5 class="kio_downstream_item_name" t-esc="packageRow.packageName"/>
+                                                <div class="kio_downstream_item_hint">Customer Package</div>
+                                            </div>
+                                        </div>
+                                        <span t-att-class="packageRow.active ? 'kio_downstream_status_badge kio_downstream_status_active' : 'kio_downstream_status_badge kio_downstream_status_archived'">
+                                            <t t-esc="packageRow.active ? 'Active' : 'Archived'"/>
+                                        </span>
+                                    </div>
+
+                                    <div class="kio_downstream_metric_rows">
+                                        <div class="kio_downstream_metric_row">
+                                            <div class="kio_downstream_metric_icon kio_downstream_metric_icon_blue">
+                                                <i class="fa fa-users"/>
+                                            </div>
+                                            <div class="kio_downstream_metric_text">Total Customers</div>
+                                            <div class="kio_downstream_metric_value"><t t-esc="packageRow.customerCount"/></div>
+                                        </div>
+                                        <div class="kio_downstream_metric_row">
+                                            <div class="kio_downstream_metric_icon kio_downstream_metric_icon_purple">
+                                                <i class="fa fa-signal"/>
+                                            </div>
+                                            <div class="kio_downstream_metric_text">Allocated Capacity</div>
+                                            <div class="kio_downstream_metric_value"><t t-esc="formatNumber(packageRow.allocatedCapacity)"/> Mbps</div>
+                                        </div>
+                                        <div class="kio_downstream_metric_row">
+                                            <div class="kio_downstream_metric_icon kio_downstream_metric_icon_green">
+                                                <i class="fa fa-bar-chart"/>
+                                            </div>
+                                            <div class="kio_downstream_metric_text">Average Capacity/User</div>
+                                            <div class="kio_downstream_metric_value"><t t-esc="formatNumber(packageRow.averageCapacity)"/> Mbps</div>
+                                        </div>
+                                        <div class="kio_downstream_metric_row">
+                                            <div class="kio_downstream_metric_icon kio_downstream_metric_icon_orange">
+                                                <i class="fa fa-money"/>
+                                            </div>
+                                            <div class="kio_downstream_metric_text">Monthly Revenue</div>
+                                            <div class="kio_downstream_metric_value"><t t-esc="formatNumber(packageRow.monthlyRevenue)"/></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+
+                        <t t-if="!state.packages.length">
+                            <div class="kio_downstream_empty">No customer packages found.</div>
+                        </t>
+                    </t>
+                </div>
+            </t>
+        </div>
+    </t>
+
+    <t t-name="kio_capacity_analysis.CustomerCapacityAnalysisPage">
+        <div class="kio_downstream_page kio_downstream_compare_page">
+            <div class="kio_downstream_compare_topbar">
+                <button type="button" class="btn kio_downstream_back_btn" t-on-click="() => this.backToDashboard()">
+                    <span aria-hidden="true">&#8592;</span> Back to Dashboard
+                </button>
+            </div>
+
+            <div class="kio_downstream_compare_header">
+                <div class="kio_downstream_compare_identity">
+                    <div class="kio_downstream_compare_icon">
+                        <i class="fa fa-wifi"/>
+                    </div>
+                    <div>
+                        <div class="kio_downstream_compare_eyebrow">Customer Package</div>
+                        <h2 class="kio_downstream_compare_title" t-esc="state.selectedPackage.packageName"/>
+                        <div class="kio_downstream_compare_subtitle">Customer capacity details</div>
+                    </div>
+                </div>
+                <span t-att-class="state.selectedPackage.active ? 'kio_downstream_status_badge kio_downstream_status_active' : 'kio_downstream_status_badge kio_downstream_status_archived'">
+                    <t t-esc="state.selectedPackage.active ? 'Active' : 'Archived'"/>
+                </span>
+            </div>
+
+            <div class="kio_downstream_compare_kpi_grid">
+                <div class="kio_downstream_compare_kpi kio_downstream_compare_kpi_blue">
+                    <div class="kio_downstream_compare_kpi_icon"><i class="fa fa-users"/></div>
+                    <div>
+                        <div class="kio_downstream_compare_kpi_label">Total Customers</div>
+                        <div class="kio_downstream_compare_kpi_value"><t t-esc="state.selectedPackage.customerCount"/></div>
+                    </div>
+                </div>
+                <div class="kio_downstream_compare_kpi kio_downstream_compare_kpi_purple">
+                    <div class="kio_downstream_compare_kpi_icon"><i class="fa fa-signal"/></div>
+                    <div>
+                        <div class="kio_downstream_compare_kpi_label">Total Capacity</div>
+                        <div class="kio_downstream_compare_kpi_value"><t t-esc="formatNumber(state.selectedPackage.allocatedCapacity)"/> Mbps</div>
+                    </div>
+                </div>
+                <div class="kio_downstream_compare_kpi kio_downstream_compare_kpi_green">
+                    <div class="kio_downstream_compare_kpi_icon"><i class="fa fa-bar-chart"/></div>
+                    <div>
+                        <div class="kio_downstream_compare_kpi_label">Average Capacity</div>
+                        <div class="kio_downstream_compare_kpi_value"><t t-esc="formatNumber(state.selectedPackage.averageCapacity)"/> Mbps</div>
+                    </div>
+                </div>
+                <div class="kio_downstream_compare_kpi kio_downstream_compare_kpi_orange">
+                    <div class="kio_downstream_compare_kpi_icon"><i class="fa fa-money"/></div>
+                    <div>
+                        <div class="kio_downstream_compare_kpi_label">Monthly Revenue</div>
+                        <div class="kio_downstream_compare_kpi_value"><t t-esc="formatNumber(state.selectedPackage.monthlyRevenue)"/></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kio_downstream_compare_section_head">
+                <h3>Customer Capacity Analysis</h3>
+                <span><t t-esc="state.selectedPackage.customers.length"/> customers</span>
+            </div>
+
+            <div class="kio_downstream_compare_table_card">
+                <div class="table-responsive">
+                    <table class="table kio_downstream_compare_table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Package</th>
+                                <th>Allocated Capacity</th>
+                                <th>Current Usage</th>
+                                <th>Remaining Capacity</th>
+                                <th>Monthly Bill</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.selectedPackage.customers" t-as="customer" t-key="customer.id">
+                                <tr>
+                                    <td>
+                                        <div class="kio_downstream_vendor_cell">
+                                            <span class="kio_downstream_vendor_avatar"><t t-esc="getInitials(customer.name)"/></span>
+                                            <span t-esc="customer.name"/>
+                                        </div>
+                                    </td>
+                                    <td><t t-esc="customer.package"/></td>
+                                    <td><t t-esc="formatNumber(customer.allocatedCapacity)"/> Mbps</td>
+                                    <td><t t-esc="formatNumber(customer.currentUsage)"/> Mbps</td>
+                                    <td><t t-esc="formatNumber(customer.remainingCapacity)"/> Mbps</td>
+                                    <td><t t-esc="formatNumber(customer.monthlyBill)"/></td>
+                                    <td>
+                                        <span t-att-class="customer.status === 'Active' ? 'kio_downstream_status_badge kio_downstream_status_active' : 'kio_downstream_status_badge kio_downstream_status_archived'">
+                                            <t t-esc="customer.status"/>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn kio_downstream_table_action" t-on-click.stop="() => this.openCustomerDetails(customer)">
+                                            View Details
+                                        </button>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="!state.selectedPackage.customers.length">
+                                <tr>
+                                    <td colspan="8" class="kio_downstream_compare_empty">No customers found for this package.</td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="kio_downstream_compare_info">
+                <i class="fa fa-info-circle"/>
+                <span>Customer capacity information is calculated based on active subscriptions and package allocations.</span>
+            </div>
+        </div>
+    </t>
+</templates>
